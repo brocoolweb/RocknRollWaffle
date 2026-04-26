@@ -8,133 +8,313 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Permanent+Marker&family=Barlow:wght@300;400;600;700&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --black:#080503;--darkbrown:#160c04;--brown:#3a1c08;
-  --mid:#6b3a1f;--warm:#a05c2c;--gold:#d4862a;
-  --amber:#e8a040;--cream:#f5deb3;--smoke:#120a04;
+  --bg1:#2b1200;
+  --bg2:#4a1f05;
+  --bg3:#6b3010;
+  --shine1:#c4651a;
+  --shine2:#e8952a;
+  --gold:#f0a830;
+  --goldlight:#ffd070;
+  --cream:#fdf0d0;
+  --dark:#1a0800;
+  --mid:#8b4513;
+  --text:#f8e8c0;
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
-body{background:var(--black);color:var(--cream);font-family:'Barlow',sans-serif;overflow-x:hidden;}
 
-nav{position:fixed;top:0;width:100%;z-index:200;
-background:linear-gradient(to bottom,rgba(8,5,3,.96) 60%,transparent);
-display:flex;justify-content:space-between;align-items:center;padding:1rem 2.5rem;}
-.logo{font-family:‘Permanent Marker’,cursive;font-size:1.6rem;color:var(–gold);
-letter-spacing:1px;text-shadow:0 0 20px rgba(212,134,42,.5);}
+body{
+color:var(–text);
+font-family:‘Barlow’,sans-serif;
+overflow-x:hidden;
+/* SHINY BROWN BACKGROUND */
+background:
+radial-gradient(ellipse at 20% 10%, rgba(180,80,10,.55) 0%, transparent 45%),
+radial-gradient(ellipse at 80% 5%,  rgba(120,45,5,.5)  0%, transparent 40%),
+radial-gradient(ellipse at 50% 50%, rgba(90,35,5,.4)   0%, transparent 60%),
+radial-gradient(ellipse at 10% 80%, rgba(150,60,8,.45) 0%, transparent 45%),
+radial-gradient(ellipse at 90% 90%, rgba(100,40,5,.5)  0%, transparent 45%),
+linear-gradient(160deg, #3d1800 0%, #5c2808 18%, #7a3810 32%, #4e2005 50%, #6b3010 68%, #3d1800 85%, #5c2808 100%);
+min-height:100vh;
+}
+
+/* Noise texture overlay for shiny depth */
+body::before{
+content:’’;
+position:fixed;inset:0;z-index:0;pointer-events:none;
+background-image:url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘300’ height=‘300’%3E%3Cfilter id=‘n’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=‘0.75’ numOctaves=‘4’ stitchTiles=‘stitch’/%3E%3CfeColorMatrix type=‘saturate’ values=‘0’/%3E%3C/filter%3E%3Crect width=‘300’ height=‘300’ filter=‘url(%23n)’ opacity=‘0.04’/%3E%3C/svg%3E”);
+opacity:.55;
+}
+
+/* Shiny light sweep across page */
+body::after{
+content:’’;
+position:fixed;top:0;left:-100%;width:60%;height:100%;z-index:0;pointer-events:none;
+background:linear-gradient(100deg,transparent 30%,rgba(255,180,80,.06) 50%,transparent 70%);
+animation:shineSweep 8s ease-in-out infinite;
+}
+@keyframes shineSweep{0%,100%{left:-100%;}50%{left:150%;}}
+
+/* ── NAV ── */
+nav{
+position:fixed;top:0;width:100%;z-index:300;
+background:linear-gradient(to bottom,rgba(26,8,0,.97) 70%,transparent);
+display:flex;justify-content:space-between;align-items:center;
+padding:1rem 2.5rem;
+border-bottom:1px solid rgba(240,168,48,.15);
+}
+.logo{font-family:‘Permanent Marker’,cursive;font-size:1.7rem;color:var(–gold);
+letter-spacing:1px;text-shadow:0 0 25px rgba(240,168,48,.6),0 2px 4px rgba(0,0,0,.8);}
 .logo span{color:var(–cream);}
 nav ul{list-style:none;display:flex;gap:2rem;}
 nav ul a{text-decoration:none;color:var(–cream);font-weight:600;letter-spacing:1px;
-font-size:.85rem;text-transform:uppercase;transition:color .3s;}
+font-size:.85rem;text-transform:uppercase;transition:color .3s;
+text-shadow:0 1px 3px rgba(0,0,0,.7);}
 nav ul a:hover{color:var(–gold);}
 
-#hero{min-height:100vh;display:flex;flex-direction:column;
+/* ── HERO ── */
+#hero{
+min-height:100vh;position:relative;z-index:1;
+display:flex;flex-direction:column;
 justify-content:center;align-items:center;text-align:center;
-position:relative;overflow:hidden;
-background:radial-gradient(ellipse at 30% 60%,rgba(58,28,8,.7),transparent 55%),
-radial-gradient(ellipse at 70% 40%,rgba(22,12,4,.9),transparent 60%),var(–black);
-padding:6rem 1rem 3rem;}
+padding:7rem 1rem 3rem;overflow:hidden;
+}
 
-#waffleCanvas{display:block;margin:0 auto 2rem;
-filter:drop-shadow(0 20px 60px rgba(212,134,42,.35));}
+/* Radial glow behind the waffle */
+#hero::before{
+content:’’;position:absolute;
+top:15%;left:50%;transform:translateX(-50%);
+width:520px;height:520px;border-radius:50%;z-index:0;
+background:radial-gradient(circle, rgba(200,100,10,.35) 0%, rgba(160,70,5,.2) 40%, transparent 70%);
+animation:glowPulse 3s ease-in-out infinite alternate;
+}
+@keyframes glowPulse{from{opacity:.6;transform:translateX(-50%) scale(1);}to{opacity:1;transform:translateX(-50%) scale(1.12);}}
 
-.hero-tag{font-family:‘Bebas Neue’,sans-serif;
-font-size:clamp(3.2rem,10vw,7.5rem);line-height:.9;color:var(–gold);
-text-shadow:4px 4px 0 var(–brown),0 0 80px rgba(212,134,42,.35);
-animation:fadeUp 1s ease both;}
-.hero-tag span{color:var(–cream);display:block;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(40px);}to{opacity:1;transform:translateY(0);}}
-.hero-sub{margin:.8rem 0 2rem;font-size:1rem;letter-spacing:3px;text-transform:uppercase;
-color:var(–warm);font-weight:300;animation:fadeUp .8s .3s ease both;}
-.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;animation:fadeUp .8s .5s ease both;}
-.btn{padding:.8rem 2rem;border-radius:3px;font-family:‘Bebas Neue’;font-size:1.1rem;
-letter-spacing:2px;cursor:pointer;transition:all .3s;text-decoration:none;display:inline-block;}
-.btn-primary{background:var(–gold);color:var(–black);border:2px solid var(–gold);}
-.btn-primary:hover{background:transparent;color:var(–gold);}
-.btn-outline{background:transparent;color:var(–cream);border:2px solid var(–cream);}
-.btn-outline:hover{background:var(–cream);color:var(–black);}
+#waffleCanvas{
+display:block;position:relative;z-index:2;
+margin:0 auto 1.5rem;
+filter:drop-shadow(0 10px 40px rgba(200,100,10,.5)) drop-shadow(0 0 80px rgba(240,168,48,.25));
+}
 
-.embers{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.hero-tag{
+position:relative;z-index:2;
+font-family:‘Bebas Neue’,sans-serif;
+font-size:clamp(3.5rem,11vw,8rem);line-height:.88;
+color:var(–gold);
+text-shadow:3px 3px 0 #5c2000,6px 6px 0 rgba(0,0,0,.4),0 0 60px rgba(240,168,48,.4);
+animation:fadeUp 1s ease both;
+}
+.hero-tag span{
+color:var(–cream);display:block;
+text-shadow:2px 2px 0 #5c2000,0 0 40px rgba(255,240,200,.2);
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(50px);}to{opacity:1;transform:translateY(0);}}
+.hero-sub{position:relative;z-index:2;margin:.8rem 0 2rem;font-size:1rem;
+letter-spacing:3px;text-transform:uppercase;
+color:var(–shine2);font-weight:300;animation:fadeUp .8s .3s ease both;
+text-shadow:0 1px 6px rgba(0,0,0,.6);}
+.hero-btns{position:relative;z-index:2;display:flex;gap:1rem;flex-wrap:wrap;
+justify-content:center;animation:fadeUp .8s .5s ease both;}
+
+.btn{padding:.85rem 2.2rem;border-radius:4px;font-family:‘Bebas Neue’;
+font-size:1.1rem;letter-spacing:2px;cursor:pointer;transition:all .3s;
+text-decoration:none;display:inline-block;}
+.btn-primary{
+background:linear-gradient(135deg,var(–shine2),var(–gold));
+color:#1a0800;border:none;
+box-shadow:0 4px 20px rgba(240,168,48,.4),inset 0 1px 0 rgba(255,255,255,.2);
+}
+.btn-primary:hover{
+background:linear-gradient(135deg,var(–goldlight),var(–shine2));
+box-shadow:0 6px 30px rgba(240,168,48,.6);transform:translateY(-2px);
+}
+.btn-outline{
+background:rgba(255,255,255,.05);color:var(–cream);
+border:2px solid rgba(253,240,208,.5);
+box-shadow:inset 0 1px 0 rgba(255,255,255,.1);
+}
+.btn-outline:hover{background:rgba(253,240,208,.15);border-color:var(–cream);}
+
+/* ── EMBERS ── */
+.embers{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
 .ember{position:absolute;border-radius:50%;animation:floatUp linear infinite;opacity:0;}
-@keyframes floatUp{0%{transform:translateY(100vh) scale(1);opacity:.8;}80%{opacity:.3;}100%{transform:translateY(-10vh) scale(.2);opacity:0;}}
+@keyframes floatUp{
+0%  {transform:translateY(100vh) scale(1) rotate(0deg);opacity:.9;}
+80% {opacity:.3;}
+100%{transform:translateY(-5vh) scale(.15) rotate(180deg);opacity:0;}
+}
 
-.ticker{background:var(–gold);color:var(–black);font-family:‘Bebas Neue’;
-font-size:1.1rem;letter-spacing:3px;overflow:hidden;padding:.4rem 0;white-space:nowrap;}
-.ticker-inner{display:inline-block;animation:tick 20s linear infinite;}
+/* ── TICKER ── */
+.ticker{
+position:relative;z-index:2;
+background:linear-gradient(90deg,var(–gold),var(–shine2),var(–gold));
+color:#1a0800;font-family:‘Bebas Neue’;font-size:1.15rem;letter-spacing:3px;
+overflow:hidden;padding:.45rem 0;white-space:nowrap;
+box-shadow:0 2px 20px rgba(0,0,0,.5);
+}
+.ticker-inner{display:inline-block;animation:tick 22s linear infinite;}
 .ticker-inner span{margin:0 2rem;}
 @keyframes tick{from{transform:translateX(0);}to{transform:translateX(-50%);}}
 
-section{padding:6rem 2rem;max-width:1100px;margin:0 auto;}
-.section-title{font-family:‘Bebas Neue’;font-size:clamp(2.5rem,6vw,4.5rem);
-color:var(–gold);letter-spacing:2px;margin-bottom:.5rem;
-position:relative;display:inline-block;}
-.section-title::after{content:’’;position:absolute;bottom:-6px;left:0;
-height:3px;width:60%;background:var(–warm);}
-.section-sub{color:var(–warm);letter-spacing:2px;font-size:.85rem;
-text-transform:uppercase;margin-bottom:3rem;}
+/* ── SECTIONS ── */
+section{position:relative;z-index:2;padding:6rem 2rem;max-width:1100px;margin:0 auto;}
 
-/* MENU – names only */
-.menu-list{display:flex;flex-direction:column;gap:0;}
-.menu-item{display:flex;align-items:center;gap:1.5rem;
-padding:1.4rem 0;border-bottom:1px solid rgba(107,58,31,.35);
-position:relative;overflow:hidden;transition:padding-left .3s;cursor:default;}
-.menu-item::before{content:’’;position:absolute;left:0;top:0;height:100%;width:3px;
-background:var(–gold);transform:scaleY(0);transform-origin:bottom;transition:transform .3s;}
+/* Section dividers */
+.section-wrap{position:relative;z-index:2;}
+.section-wrap.shiny{
+background:linear-gradient(180deg,
+rgba(30,12,2,.0) 0%,
+rgba(50,20,5,.85) 15%,
+rgba(60,25,8,.9) 50%,
+rgba(50,20,5,.85) 85%,
+rgba(30,12,2,.0) 100%);
+border-top:1px solid rgba(200,101,26,.2);
+border-bottom:1px solid rgba(200,101,26,.2);
+}
+
+.section-title{
+font-family:‘Bebas Neue’;font-size:clamp(2.5rem,6vw,4.8rem);
+color:var(–gold);letter-spacing:3px;margin-bottom:.5rem;
+position:relative;display:inline-block;
+text-shadow:2px 2px 0 rgba(0,0,0,.6),0 0 30px rgba(240,168,48,.3);
+}
+.section-title::after{
+content:’’;position:absolute;bottom:-6px;left:0;
+height:3px;width:60%;
+background:linear-gradient(90deg,var(–shine2),transparent);
+}
+.section-sub{
+color:var(–shine2);letter-spacing:2px;font-size:.85rem;
+text-transform:uppercase;margin-bottom:3rem;
+text-shadow:0 1px 4px rgba(0,0,0,.5);
+}
+
+/* ── MENU – names only ── */
+.menu-list{display:flex;flex-direction:column;}
+.menu-item{
+display:flex;align-items:center;gap:1.5rem;
+padding:1.5rem 0;border-bottom:1px solid rgba(200,101,26,.25);
+position:relative;overflow:hidden;transition:padding-left .3s;cursor:default;
+}
+.menu-item::before{
+content:’’;position:absolute;left:0;top:0;height:100%;width:3px;
+background:linear-gradient(to bottom,var(–goldlight),var(–gold));
+transform:scaleY(0);transform-origin:bottom;transition:transform .35s;
+}
 .menu-item:hover::before{transform:scaleY(1);}
-.menu-item:hover{padding-left:1rem;}
-.menu-item-num{font-family:‘Bebas Neue’;font-size:1rem;color:var(–mid);letter-spacing:2px;flex-shrink:0;}
-.menu-item-name{font-family:‘Bebas Neue’;font-size:clamp(1.5rem,3.5vw,2.2rem);
-color:var(–cream);letter-spacing:2px;transition:color .3s;flex:1;}
+.menu-item:hover{padding-left:1.2rem;}
+.menu-item-num{
+font-family:‘Bebas Neue’;font-size:1rem;
+color:rgba(240,168,48,.4);letter-spacing:2px;flex-shrink:0;
+}
+.menu-item-name{
+font-family:‘Bebas Neue’;
+font-size:clamp(1.6rem,3.5vw,2.3rem);
+color:var(–cream);letter-spacing:2px;flex:1;
+transition:color .3s;
+text-shadow:0 1px 4px rgba(0,0,0,.5);
+}
 .menu-item:hover .menu-item-name{color:var(–gold);}
-.menu-tag{background:var(–gold);color:var(–black);font-size:.65rem;font-weight:700;
-letter-spacing:1px;padding:.15rem .55rem;border-radius:20px;margin-left:.8rem;vertical-align:middle;}
+.menu-tag{
+background:linear-gradient(135deg,var(–shine2),var(–gold));
+color:#1a0800;font-size:.68rem;font-weight:700;
+letter-spacing:1px;padding:.18rem .6rem;border-radius:20px;
+margin-left:.8rem;vertical-align:middle;
+}
 
-#showcase{background:var(–darkbrown);border-top:1px solid var(–brown);
-border-bottom:1px solid var(–brown);padding:5rem 2rem;text-align:center;}
-.showcase-inner{max-width:1100px;margin:0 auto;}
+/* ── FEATURES ── */
+.features-wrap{
+position:relative;z-index:2;
+padding:5rem 2rem;text-align:center;
+background:linear-gradient(180deg,transparent,rgba(40,15,3,.92) 10%,rgba(40,15,3,.92) 90%,transparent);
+border-top:1px solid rgba(200,101,26,.2);
+border-bottom:1px solid rgba(200,101,26,.2);
+}
+.features-inner{max-width:1100px;margin:0 auto;}
 .features{display:flex;flex-wrap:wrap;gap:1.5rem;justify-content:center;margin-top:3rem;}
-.feat{flex:1;min-width:160px;max-width:200px;background:var(–smoke);
-border:1px solid var(–brown);border-radius:10px;padding:1.5rem 1rem;text-align:center;
-transition:border-color .3s,transform .3s;}
-.feat:hover{border-color:var(–gold);transform:translateY(-5px);}
-.feat-icon{font-size:2.5rem;margin-bottom:.6rem;}
-.feat-name{font-family:‘Bebas Neue’;font-size:1.1rem;color:var(–gold);letter-spacing:1px;margin-bottom:.3rem;}
-.feat-text{font-size:.82rem;color:#c9a87c;line-height:1.5;}
+.feat{
+flex:1;min-width:155px;max-width:195px;
+background:linear-gradient(145deg,rgba(80,30,8,.8),rgba(45,15,3,.9));
+border:1px solid rgba(200,101,26,.3);border-radius:12px;
+padding:1.6rem 1rem;text-align:center;
+transition:all .3s;
+box-shadow:0 4px 20px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,180,80,.1);
+}
+.feat:hover{
+border-color:var(–gold);transform:translateY(-6px);
+box-shadow:0 10px 30px rgba(0,0,0,.4),0 0 20px rgba(240,168,48,.15);
+}
+.feat-icon{font-size:2.6rem;margin-bottom:.6rem;}
+.feat-name{font-family:‘Bebas Neue’;font-size:1.1rem;color:var(–gold);
+letter-spacing:1px;margin-bottom:.3rem;}
+.feat-text{font-size:.82rem;color:rgba(248,232,192,.7);line-height:1.5;}
 
+/* ── ABOUT ── */
 .about-wrap{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
 @media(max-width:700px){.about-wrap{grid-template-columns:1fr;}}
-.about-text p{color:#c9a87c;line-height:1.8;margin-bottom:1rem;}
-.about-badge{display:inline-block;border:2px solid var(–gold);padding:.4rem 1rem;
-font-family:‘Bebas Neue’;letter-spacing:2px;color:var(–gold);font-size:1rem;margin-bottom:1.5rem;}
+.about-text p{color:rgba(248,232,192,.8);line-height:1.9;margin-bottom:1rem;}
+.about-badge{
+display:inline-block;
+background:linear-gradient(90deg,rgba(240,168,48,.15),transparent);
+border-left:3px solid var(–gold);
+padding:.4rem 1rem;font-family:‘Bebas Neue’;
+letter-spacing:2px;color:var(–gold);font-size:1rem;margin-bottom:1.5rem;
+}
 .about-visual{display:flex;align-items:center;justify-content:center;}
-#miniCanvas{display:block;filter:drop-shadow(0 10px 40px rgba(212,134,42,.3));}
+#miniCanvas{
+display:block;
+filter:drop-shadow(0 8px 30px rgba(200,100,10,.45)) drop-shadow(0 0 50px rgba(240,168,48,.2));
+}
 
-#location{text-align:center;}
-.loc-card{background:var(–darkbrown);border:1px solid var(–brown);border-radius:16px;
-padding:3rem 2rem;max-width:680px;margin:0 auto;position:relative;overflow:hidden;}
+/* ── LOCATION ── */
+.loc-card{
+background:linear-gradient(145deg,rgba(60,22,5,.92),rgba(35,12,2,.95));
+border:1px solid rgba(200,101,26,.35);border-radius:16px;
+padding:3rem 2rem;max-width:680px;margin:0 auto;position:relative;overflow:hidden;
+box-shadow:0 8px 40px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,180,80,.1);
+}
 .loc-card::before{content:‘📍’;position:absolute;top:-20px;right:-20px;font-size:8rem;opacity:.05;}
 .loc-icon{font-size:3rem;margin-bottom:.8rem;}
-.loc-name{font-family:‘Bebas Neue’;font-size:2.5rem;color:var(–gold);letter-spacing:2px;}
-.loc-addr{color:#c9a87c;font-size:1rem;line-height:1.8;margin:.8rem 0 1.5rem;}
+.loc-name{font-family:‘Bebas Neue’;font-size:2.5rem;color:var(–gold);letter-spacing:2px;
+text-shadow:0 0 20px rgba(240,168,48,.3);}
+.loc-addr{color:rgba(248,232,192,.75);font-size:1rem;line-height:1.8;margin:.8rem 0 1.5rem;}
 .loc-grid{display:flex;justify-content:center;gap:2.5rem;flex-wrap:wrap;margin:1.5rem 0;}
 .loc-item{text-align:center;}
 .loc-item-icon{font-size:1.8rem;margin-bottom:.2rem;}
 .loc-item-label{font-family:‘Bebas Neue’;color:var(–gold);font-size:.9rem;letter-spacing:1px;}
-.loc-item-val{font-size:.82rem;color:#c9a87c;}
-.map-embed{border-radius:12px;overflow:hidden;margin-top:2rem;border:2px solid var(–brown);}
+.loc-item-val{font-size:.82rem;color:rgba(248,232,192,.7);}
+.map-embed{border-radius:12px;overflow:hidden;margin-top:2rem;
+border:2px solid rgba(200,101,26,.35);
+box-shadow:0 4px 20px rgba(0,0,0,.4);}
 .map-embed iframe{display:block;width:100%;height:300px;}
 
-footer{background:var(–smoke);border-top:1px solid var(–brown);padding:3rem 2rem;text-align:center;}
-.footer-logo{font-family:‘Permanent Marker’;font-size:2rem;color:var(–gold);margin-bottom:.5rem;}
-.footer-tagline{color:var(–warm);font-size:.88rem;letter-spacing:2px;margin-bottom:1.5rem;}
+/* ── FOOTER ── */
+footer{
+position:relative;z-index:2;
+background:linear-gradient(180deg,rgba(26,8,0,.0),rgba(10,3,0,.97));
+border-top:1px solid rgba(200,101,26,.2);
+padding:3rem 2rem;text-align:center;
+}
+.footer-logo{font-family:‘Permanent Marker’;font-size:2rem;color:var(–gold);
+margin-bottom:.5rem;text-shadow:0 0 20px rgba(240,168,48,.4);}
+.footer-tagline{color:var(–shine2);font-size:.88rem;letter-spacing:2px;margin-bottom:1.5rem;}
 .footer-links{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;margin-bottom:1.5rem;}
-.footer-links a{color:#c9a87c;text-decoration:none;font-size:.85rem;text-transform:uppercase;letter-spacing:1px;transition:color .3s;}
+.footer-links a{color:rgba(248,232,192,.6);text-decoration:none;font-size:.85rem;
+text-transform:uppercase;letter-spacing:1px;transition:color .3s;}
 .footer-links a:hover{color:var(–gold);}
-.footer-copy{color:var(–mid);font-size:.78rem;}
-@media(max-width:600px){nav ul{display:none;}}
+.footer-copy{color:rgba(139,69,19,.7);font-size:.78rem;}
+
+@media(max-width:600px){nav ul{display:none;}#waffleCanvas{width:300px!important;height:300px!important;}}
 </style>
 
 </head>
 <body>
+
+<!-- Floating ember particles -->
+
+<div class="embers" id="embers"></div>
+
+<!-- NAV -->
 
 <nav>
   <div class="logo">Rock n Roll <span>Waffle</span></div>
@@ -145,10 +325,10 @@ footer{background:var(–smoke);border-top:1px solid var(–brown);padding:3rem 
   </ul>
 </nav>
 
-<div class="embers" id="embers"></div>
+<!-- ═══════ HERO ═══════ -->
 
 <header id="hero">
-  <canvas id="waffleCanvas" width="440" height="400"></canvas>
+  <canvas id="waffleCanvas" width="460" height="430"></canvas>
   <h1 class="hero-tag">Rock n Roll<span>Waffle</span></h1>
   <p class="hero-sub">🎸 Crispy · Stacked · Legendary · Vesu, Surat</p>
   <div class="hero-btns">
@@ -156,6 +336,8 @@ footer{background:var(–smoke);border-top:1px solid var(–brown);padding:3rem 
     <a href="#location" class="btn btn-outline">Find Us</a>
   </div>
 </header>
+
+<!-- TICKER -->
 
 <div class="ticker">
   <div class="ticker-inner">
@@ -170,76 +352,65 @@ footer{background:var(–smoke);border-top:1px solid var(–brown);padding:3rem 
   </div>
 </div>
 
+<!-- ═══════ MENU ═══════ -->
+
+<div class="section-wrap">
 <section id="menu">
   <div class="section-title">The Menu</div>
   <p class="section-sub">Every waffle is a performance 🎸</p>
   <div class="menu-list">
-    <div class="menu-item">
-      <span class="menu-item-num">01</span>
-      <span class="menu-item-name">Classic Butter Waffle <span class="menu-tag">⭐ BESTSELLER</span></span>
-    </div>
-    <div class="menu-item">
-      <span class="menu-item-num">02</span>
-      <span class="menu-item-name">Nutella Overload <span class="menu-tag">🔥 HOT</span></span>
-    </div>
-    <div class="menu-item">
-      <span class="menu-item-num">03</span>
-      <span class="menu-item-name">Berry Blast</span>
-    </div>
-    <div class="menu-item">
-      <span class="menu-item-num">04</span>
-      <span class="menu-item-name">Ice Cream Smash <span class="menu-tag">🆕 NEW</span></span>
-    </div>
-    <div class="menu-item">
-      <span class="menu-item-num">05</span>
-      <span class="menu-item-name">Peanut Butter Riot</span>
-    </div>
-    <div class="menu-item">
-      <span class="menu-item-num">06</span>
-      <span class="menu-item-name">Masala Cheese Waffle <span class="menu-tag">🌶 SPICY</span></span>
-    </div>
-    <div class="menu-item">
-      <span class="menu-item-num">07</span>
-      <span class="menu-item-name">Choco Lava Stack</span>
-    </div>
-    <div class="menu-item">
-      <span class="menu-item-num">08</span>
-      <span class="menu-item-name">Honey Almond Crunch</span>
-    </div>
+    <div class="menu-item"><span class="menu-item-num">01</span><span class="menu-item-name">Classic Butter Waffle <span class="menu-tag">⭐ BESTSELLER</span></span></div>
+    <div class="menu-item"><span class="menu-item-num">02</span><span class="menu-item-name">Nutella Overload <span class="menu-tag">🔥 HOT</span></span></div>
+    <div class="menu-item"><span class="menu-item-num">03</span><span class="menu-item-name">Berry Blast</span></div>
+    <div class="menu-item"><span class="menu-item-num">04</span><span class="menu-item-name">Ice Cream Smash <span class="menu-tag">🆕 NEW</span></span></div>
+    <div class="menu-item"><span class="menu-item-num">05</span><span class="menu-item-name">Peanut Butter Riot</span></div>
+    <div class="menu-item"><span class="menu-item-num">06</span><span class="menu-item-name">Masala Cheese Waffle <span class="menu-tag">🌶 SPICY</span></span></div>
+    <div class="menu-item"><span class="menu-item-num">07</span><span class="menu-item-name">Choco Lava Stack</span></div>
+    <div class="menu-item"><span class="menu-item-num">08</span><span class="menu-item-name">Honey Almond Crunch</span></div>
   </div>
 </section>
+</div>
 
-<div id="showcase">
-  <div class="showcase-inner">
+<!-- ═══════ FEATURES ═══════ -->
+
+<div class="features-wrap">
+  <div class="features-inner">
     <div class="section-title" style="display:block;text-align:center;">Why Rock n Roll?</div>
     <p class="section-sub" style="text-align:center;">Handcrafted. Fresh. Every. Single. Time.</p>
     <div class="features">
       <div class="feat"><div class="feat-icon">🔥</div><div class="feat-name">Fresh Iron</div><div class="feat-text">Made hot on the spot, every order from scratch.</div></div>
       <div class="feat"><div class="feat-icon">🧈</div><div class="feat-name">Real Butter</div><div class="feat-text">Only premium real butter — no substitutes.</div></div>
       <div class="feat"><div class="feat-icon">🎸</div><div class="feat-name">Rock Vibes</div><div class="feat-text">Eat to the beat — bold flavours, bold attitude.</div></div>
-      <div class="feat"><div class="feat-icon">🍓</div><div class="feat-name">Fresh Berries</div><div class="feat-text">Topped with the freshest seasonal fruit daily.</div></div>
+      <div class="feat"><div class="feat-icon">🍓</div><div class="feat-name">Fresh Berries</div><div class="feat-text">Topped with freshest seasonal fruit daily.</div></div>
       <div class="feat"><div class="feat-icon">⚡</div><div class="feat-name">5 Min Ready</div><div class="feat-text">Quick service — your waffle never keeps you waiting.</div></div>
     </div>
   </div>
 </div>
 
+<!-- ═══════ ABOUT ═══════ -->
+
+<div class="section-wrap">
 <section id="about">
   <div class="about-wrap">
     <div class="about-text">
       <div class="about-badge">Est. 2023 · Vesu, Surat</div>
       <div class="section-title">Our Story</div>
       <p class="section-sub" style="margin-bottom:1.5rem;">Born from a love of waffles & music</p>
-      <p>Rock n Roll Waffle was born in the heart of Vesu, Surat — a small stall with a big dream. We believed that waffles deserved the same energy as a rock concert: loud, bold, and absolutely unforgettable.</p>
-      <p>Every waffle we serve is crafted with premium ingredients, cooked golden-crispy on cast-iron irons, and topped with flavours that hit harder than a guitar riff.</p>
-      <p>From classic butter to berry explosions — something for every legend who walks up to our stall.</p>
-      <a href="#menu" class="btn btn-primary" style="margin-top:1rem;">View Full Menu</a>
+      <p>Rock n Roll Waffle was born in the heart of Vesu, Surat — a small stall with a big dream. We believed waffles deserved the same energy as a rock concert: loud, bold, and absolutely unforgettable.</p>
+      <p>Every waffle is crafted with premium ingredients, cooked golden-crispy on cast-iron irons, and topped with flavours that hit harder than a guitar riff.</p>
+      <p>From classic butter to berry explosions — something for every legend who walks up.</p>
+      <a href="#menu" class="btn btn-primary" style="margin-top:1.2rem;">View Full Menu</a>
     </div>
     <div class="about-visual">
-      <canvas id="miniCanvas" width="300" height="280"></canvas>
+      <canvas id="miniCanvas" width="310" height="290"></canvas>
     </div>
   </div>
 </section>
+</div>
 
+<!-- ═══════ LOCATION ═══════ -->
+
+<div class="section-wrap">
 <section id="location" style="max-width:800px;">
   <div style="text-align:center;margin-bottom:2rem;">
     <div class="section-title">Find Us</div>
@@ -269,6 +440,9 @@ footer{background:var(–smoke);border-top:1px solid var(–brown);padding:3rem 
     </div>
   </div>
 </section>
+</div>
+
+<!-- FOOTER -->
 
 <footer>
   <div class="footer-logo">Rock n Roll Waffle 🧇</div>
@@ -276,370 +450,512 @@ footer{background:var(–smoke);border-top:1px solid var(–brown);padding:3rem 
   <div class="footer-links">
     <a href="#menu">Menu</a><a href="#about">About</a><a href="#location">Location</a>
   </div>
-  <p class="footer-copy">© 2025 Rock n Roll Waffle. Near Pooja Abhishek Apartment, Vesu, Surat 395007.</p>
+  <p class="footer-copy">© 2025 Rock n Roll Waffle · Near Pooja Abhishek Apartment, Vesu, Surat 395007</p>
 </footer>
 
+<!-- ═══════════════════════════════════════════════════
+     ULTRA-DELICIOUS 3D STACKED WAFFLE CANVAS ENGINE
+═══════════════════════════════════════════════════ -->
+
 <script>
-/* ═══════════════════════════════════════════════
-   REALISTIC STACKED WAFFLE CANVAS ANIMATION
-   3 stacked waffles + berries + animated syrup pour
-   Modelled after the uploaded photo
-═══════════════════════════════════════════════ */
+function buildScene(id) {
+  const cv = document.getElementById(id);
+  if (!cv) return;
+  const cx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  let t = 0;
 
-function buildWaffleScene(canvasId) {
-  const canvas = document.getElementById(canvasId);
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const CW = canvas.width, CH = canvas.height;
-  let tick = 0;
-
-  /* ---- helpers ---- */
-  function lerp(a, b, t){ return a + (b-a)*t; }
-  function clamp(v,mn,mx){ return Math.max(mn,Math.min(mx,v)); }
-  function shade(hex, amt){
-    let n=parseInt(hex.replace('#',''),16),
-        r=clamp((n>>16)+amt,0,255),
-        g=clamp(((n>>8)&255)+amt,0,255),
-        b=clamp((n&255)+amt,0,255);
-    return `rgb(${r},${g},${b})`;
+  /* ─── colour helpers ─── */
+  function rgb(r,g,b,a=1){ return `rgba(${r},${g},${b},${a})`; }
+  function clamp(v,lo,hi){ return Math.max(lo,Math.min(hi,v)); }
+  function shiftHex(hex,d){
+    const n=parseInt(hex.replace('#',''),16);
+    return rgb(clamp((n>>16)+d,0,255),clamp(((n>>8)&255)+d,0,255),clamp((n&255)+d,0,255));
   }
 
-  /* ---- draw a single waffle slab ---- */
-  /* cx,cy = centre; ww,wh = width/height; skewX = horizontal skew px; brightness delta */
-  function drawWaffleSlab(cx, cy, ww, wh, skewX, brt) {
-    ctx.save();
-    ctx.translate(cx, cy);
-    const sk = skewX;
+  /* ─── draw one waffle slab ─── */
+  /*  cx,cy: centre   ww,wh: size   sk: side-skew px   bright: +/- lightness */
+  function slab(ox, oy, ww, wh, sk, bright) {
+    cx.save(); cx.translate(ox, oy);
 
-    // outline / drop shadow
-    ctx.beginPath();
-    waffleShape(ctx, sk, ww, wh, 8);
-    ctx.shadowColor = 'rgba(0,0,0,.6)';
-    ctx.shadowBlur  = 16;
-    ctx.shadowOffsetY = 6;
-    ctx.fillStyle = shade('#6b3010', brt-18);
-    ctx.fill();
-    ctx.shadowColor = 'transparent';
+    // Cast shadow beneath slab
+    cx.save();
+    cx.translate(6, 10);
+    cx.beginPath(); waffleOutline(cx, sk, ww, wh, 10);
+    cx.fillStyle = 'rgba(0,0,0,.45)';
+    cx.filter = 'blur(8px)';
+    cx.fill();
+    cx.filter = 'none';
+    cx.restore();
 
-    // main body gradient
-    ctx.beginPath();
-    waffleShape(ctx, sk, ww, wh, 8);
-    const grd = ctx.createLinearGradient(-ww*.5, -wh*.5, ww*.5, wh*.5);
-    grd.addColorStop(0,   shade('#c4833a', brt+14));
-    grd.addColorStop(0.35,shade('#a05c2c', brt));
-    grd.addColorStop(0.7, shade('#7a3d10', brt-8));
-    grd.addColorStop(1,   shade('#5a2a08', brt-16));
-    ctx.fillStyle = grd;
-    ctx.fill();
+    // BOTTOM CRUST edge (side thickness, 3-D illusion)
+    cx.beginPath();
+    const bx = -ww/2, tw = ww;
+    const lsk = -sk*.5, rsk = sk*.5;
+    cx.moveTo(bx + lsk,       wh/2);
+    cx.lineTo(bx + lsk + 4,   wh/2 + 9);
+    cx.lineTo(bx + tw + rsk - 4, wh/2 + 9);
+    cx.lineTo(bx + tw + rsk,  wh/2);
+    cx.closePath();
+    const edgeG = cx.createLinearGradient(0, wh/2, 0, wh/2+9);
+    edgeG.addColorStop(0, shiftHex('#7a3010', bright-30));
+    edgeG.addColorStop(1, shiftHex('#3a1005', bright-50));
+    cx.fillStyle = edgeG;
+    cx.fill();
 
-    // grid lines
+    // Main waffle face
+    cx.beginPath(); waffleOutline(cx, sk, ww, wh, 10);
+    const faceG = cx.createLinearGradient(-ww*.5+sk*.4, -wh*.5, ww*.4, wh*.5);
+    faceG.addColorStop(0,   shiftHex('#d4883a', bright+22));
+    faceG.addColorStop(0.22,shiftHex('#bf6f25', bright+8));
+    faceG.addColorStop(0.55,shiftHex('#9e5018', bright));
+    faceG.addColorStop(0.8, shiftHex('#7a3010', bright-10));
+    faceG.addColorStop(1,   shiftHex('#5a2005', bright-20));
+    cx.fillStyle = faceG;
+    cx.fill();
+
+    // ── WAFFLE GRID ──
     const cols=4, rows=4;
     const cw=ww/cols, ch=wh/rows;
-    ctx.strokeStyle = shade('#3a1808', brt-10);
-    ctx.lineWidth = 2.5;
+
+    // vertical ridges
     for(let i=1;i<cols;i++){
       const xPos = -ww/2 + i*cw;
-      const skTop = sk*(i/cols - .5)*2*.4;
-      const skBot = sk*(i/cols - .5)*2*.4;
-      ctx.beginPath();
-      ctx.moveTo(xPos + sk*.45 + skTop, -wh*.5+1);
-      ctx.lineTo(xPos - sk*.45 + skBot,  wh*.5-1);
-      ctx.stroke();
+      const skRatio = (i/cols)-.5;
+      cx.beginPath();
+      cx.moveTo(xPos + sk*(skRatio+.15), -wh*.5+4);
+      cx.lineTo(xPos + sk*(skRatio-.15),  wh*.5-4);
+      // Ridge highlight left
+      cx.strokeStyle = rgb(80,30,5,.9);
+      cx.lineWidth = 3.5;
+      cx.stroke();
+      cx.beginPath();
+      cx.moveTo(xPos + sk*(skRatio+.15)+2, -wh*.5+4);
+      cx.lineTo(xPos + sk*(skRatio-.15)+2,  wh*.5-4);
+      cx.strokeStyle = rgb(200,130,60,.25);
+      cx.lineWidth = 1.5;
+      cx.stroke();
     }
+    // horizontal ridges
     for(let j=1;j<rows;j++){
       const yPos = -wh/2 + j*ch;
-      const ratio = j/rows - .5;
-      const xShift = sk * ratio;
-      ctx.beginPath();
-      ctx.moveTo(-ww/2+xShift+1, yPos);
-      ctx.lineTo( ww/2+xShift-1, yPos);
-      ctx.stroke();
+      const yr = (j/rows)-.5;
+      const xShift = sk*yr;
+      cx.beginPath();
+      cx.moveTo(-ww*.5+xShift+4, yPos);
+      cx.lineTo( ww*.5+xShift-4, yPos);
+      cx.strokeStyle = rgb(80,30,5,.9);
+      cx.lineWidth = 3.5; cx.stroke();
+      cx.beginPath();
+      cx.moveTo(-ww*.5+xShift+4, yPos+2);
+      cx.lineTo( ww*.5+xShift-4, yPos+2);
+      cx.strokeStyle = rgb(200,130,60,.2);
+      cx.lineWidth = 1.5; cx.stroke();
     }
 
-    // pocket cells — dark inner
+    // ── POCKET CELLS ── (each cell shaded for depth)
     for(let i=0;i<cols;i++){
       for(let j=0;j<rows;j++){
-        const ratio = (j+.5)/rows - .5;
-        const xShift = sk*ratio;
-        const px = -ww/2 + i*cw + 5 + xShift;
-        const py = -wh/2 + j*ch + 5;
-        ctx.beginPath();
-        ctx.rect(px, py, cw-10, ch-10);
-        ctx.fillStyle = `rgba(0,0,0,${0.18 - brt*.001})`;
-        ctx.fill();
-        // inner highlight top-left
-        ctx.beginPath();
-        ctx.rect(px, py, cw-10, 3);
-        ctx.fillStyle = `rgba(255,200,120,0.08)`;
-        ctx.fill();
+        const yr = (j+.5)/rows-.5;
+        const xsh = sk*yr;
+        const px = -ww/2 + i*cw + 5.5 + xsh;
+        const py = -wh/2 + j*ch + 5.5;
+        const pw = cw-11, ph = ch-11;
+        if(pw<2||ph<2) continue;
+        // pocket inner gradient (concave look)
+        const pG = cx.createRadialGradient(px+pw*.4,py+ph*.3,0, px+pw*.5,py+ph*.5, Math.max(pw,ph)*.7);
+        pG.addColorStop(0,  rgb(210,135,55,.18));
+        pG.addColorStop(.5, rgb(60,20,5,.22));
+        pG.addColorStop(1,  rgb(20,5,0,.45));
+        cx.beginPath(); cx.rect(px,py,pw,ph);
+        cx.fillStyle=pG; cx.fill();
       }
     }
 
-    // top surface highlight strip
-    ctx.beginPath();
-    ctx.moveTo(-ww*.5 + sk*.5 + 8, -wh*.5 + 2);
-    ctx.lineTo( ww*.5 + sk*.5 - 8, -wh*.5 + 2);
-    ctx.strokeStyle = 'rgba(245,222,179,.22)';
-    ctx.lineWidth = 3;
-    ctx.stroke();
+    // ── SURFACE SHINE (glossy highlight top-left area) ──
+    const shineG = cx.createLinearGradient(-ww*.4+sk*.4,-wh*.45, ww*.1,wh*.1);
+    shineG.addColorStop(0, rgb(255,220,150,.28));
+    shineG.addColorStop(.35,rgb(255,200,120,.10));
+    shineG.addColorStop(1,  rgb(255,200,120,0));
+    cx.beginPath(); waffleOutline(cx,sk,ww,wh,10);
+    cx.fillStyle=shineG; cx.fill();
 
-    ctx.restore();
+    // specular hotspot
+    cx.save();
+    cx.beginPath();
+    cx.ellipse(-ww*.22+sk*.3, -wh*.3, ww*.15, wh*.1, -0.3, 0, Math.PI*2);
+    cx.fillStyle=rgb(255,240,200,.22);
+    cx.fill();
+    cx.restore();
+
+    cx.restore();
   }
 
-  function waffleShape(ctx, sk, ww, wh, r){
-    const x=-ww/2, y=-wh/2, w=ww, h=wh;
-    const tl=sk*.5, tr=sk*.5, bl=-sk*.5, br=-sk*.5;
-    ctx.moveTo(x+tl+r, y);
-    ctx.lineTo(x+w+tr-r, y);
-    ctx.quadraticCurveTo(x+w+tr, y, x+w+tr, y+r);
-    ctx.lineTo(x+w+br, y+h-r);
-    ctx.quadraticCurveTo(x+w+br, y+h, x+w+br-r, y+h);
-    ctx.lineTo(x+bl+r, y+h);
-    ctx.quadraticCurveTo(x+bl, y+h, x+bl, y+h-r);
-    ctx.lineTo(x+tl, y+r);
-    ctx.quadraticCurveTo(x+tl, y, x+tl+r, y);
-    ctx.closePath();
+  function waffleOutline(c, sk, ww, wh, r) {
+    const x=-ww/2,y=-wh/2,w=ww,h=wh;
+    const tl=sk*.5,tr=sk*.5,bl=-sk*.5,br=-sk*.5;
+    c.moveTo(x+tl+r, y);
+    c.lineTo(x+w+tr-r, y);
+    c.quadraticCurveTo(x+w+tr,y, x+w+tr,y+r);
+    c.lineTo(x+w+br,y+h-r);
+    c.quadraticCurveTo(x+w+br,y+h, x+w+br-r,y+h);
+    c.lineTo(x+bl+r,y+h);
+    c.quadraticCurveTo(x+bl,y+h, x+bl,y+h-r);
+    c.lineTo(x+tl,y+r);
+    c.quadraticCurveTo(x+tl,y, x+tl+r,y);
+    c.closePath();
   }
 
-  /* ---- syrup drizzle on top of a slab ---- */
-  function drawSyrupDrizzle(cx, cy, ww, wh, sk, alpha){
+  /* ─── BUTTER pat on top ─── */
+  function drawButter(ox,oy,ww,sk){
+    cx.save(); cx.translate(ox,oy);
+    const bw=ww*.28, bh=ww*.1;
+    const bx=-bw/2+sk*.05, by=-bh/2;
+    // shadow
+    cx.beginPath();
+    cx.ellipse(bx+bw/2+3,by+bh+6,bw*.5,5,0,0,Math.PI*2);
+    cx.fillStyle='rgba(0,0,0,.25)'; cx.fill();
+    // body
+    const bG=cx.createLinearGradient(bx,by,bx+bw,by+bh);
+    bG.addColorStop(0,'#ffe870'); bG.addColorStop(.5,'#f5c830'); bG.addColorStop(1,'#d4a010');
+    cx.beginPath();
+    roundRect2(cx,bx,by,bw,bh,5);
+    cx.fillStyle=bG; cx.fill();
+    // shine
+    cx.beginPath(); roundRect2(cx,bx+4,by+3,bw*.55,bh*.35,3);
+    cx.fillStyle='rgba(255,255,180,.45)'; cx.fill();
+    cx.restore();
+  }
+  function roundRect2(c,x,y,w,h,r){
+    c.moveTo(x+r,y);c.lineTo(x+w-r,y);c.quadraticCurveTo(x+w,y,x+w,y+r);
+    c.lineTo(x+w,y+h-r);c.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+    c.lineTo(x+r,y+h);c.quadraticCurveTo(x,y+h,x,y+h-r);
+    c.lineTo(x,y+r);c.quadraticCurveTo(x,y,x+r,y); c.closePath();
+  }
+
+  /* ─── SYRUP drizzle on top of a slab ─── */
+  function syrupLayer(ox,oy,ww,wh,sk,alpha){
     if(alpha<=0) return;
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.globalAlpha = alpha;
-    ctx.strokeStyle = '#c8680a';
-    ctx.lineWidth   = 4;
-    ctx.lineCap = 'round';
-    const skips = [[-ww*.25, sk*.1],[ 0, 0],[ww*.22, -sk*.08]];
-    skips.forEach(([ox,oy])=>{
-      ctx.beginPath();
-      ctx.moveTo(ox+oy, -wh*.5+2);
-      ctx.bezierCurveTo(ox+oy+10, 0, ox-8, wh*.3, ox+oy+4, wh*.5+8);
-      ctx.stroke();
+    cx.save(); cx.translate(ox,oy); cx.globalAlpha=alpha;
+    // flowing syrup puddles between ridges
+    const syrupG=cx.createLinearGradient(-ww*.4,0,ww*.4,0);
+    syrupG.addColorStop(0,'rgba(180,80,5,.7)');
+    syrupG.addColorStop(.5,'rgba(210,105,10,.85)');
+    syrupG.addColorStop(1,'rgba(180,80,5,.7)');
+    const streams=[[-ww*.3,sk*.1],[-ww*.05,-sk*.05],[ww*.22,sk*.08]];
+    streams.forEach(([dx,dy])=>{
+      cx.beginPath();
+      cx.moveTo(dx+sk*.4,  -wh*.5+2+dy);
+      cx.bezierCurveTo(dx+14,  -wh*.1,  dx-10, wh*.25, dx+sk*.(-0.3), wh*.5+10);
+      cx.strokeStyle=syrupG;
+      cx.lineWidth=5; cx.lineCap='round'; cx.stroke();
+      // drip blob
+      cx.beginPath();
+      cx.ellipse(dx-sk*.2, wh*.5+14, 6, 8, 0, 0, Math.PI*2);
+      cx.fillStyle=rgb(180,80,5,.55); cx.fill();
     });
-    ctx.globalAlpha=1;
-    ctx.restore();
+    // gloss highlight on syrup
+    streams.forEach(([dx])=>{
+      cx.beginPath();
+      cx.moveTo(dx+1, -wh*.5+2);
+      cx.bezierCurveTo(dx+8,-wh*.1, dx-4,wh*.25, dx-2, wh*.45);
+      cx.strokeStyle=rgb(255,180,80,.3);
+      cx.lineWidth=2; cx.stroke();
+    });
+    cx.globalAlpha=1; cx.restore();
   }
 
-  /* ---- berries ---- */
-  const BERRY_LIST = [
-    {rx:-.18, ry:-.55, r:1.35, type:'strawberry'},
-    {rx: .12, ry:-.65, r:1.0,  type:'blueberry'},
-    {rx:-.04, ry:-.58, r:0.9,  type:'blueberry'},
-    {rx: .25, ry:-.52, r:1.1,  type:'raspberry'},
-    {rx:-.28, ry:-.62, r:0.95, type:'blueberry'},
-    {rx: .04, ry:-.45, r:0.85, type:'blueberry'},
-    {rx: .32, ry:-.62, r:0.8,  type:'raspberry'},
-    {rx:-.15, ry:-.46, r:0.78, type:'raspberry'},
-    {rx: .18, ry:-.44, r:1.05, type:'strawberry'},
-    {rx:-.32, ry:-.50, r:0.72, type:'blueberry'},
+  /* ─── ANIMATED SYRUP POUR ─── */
+  function pourSyrup(pour, topY, ww, sk) {
+    const jX = W*.73 + sk*.12;
+    const jY = H*.06;
+    const sX = jX - 7;
+    const sEndY = topY - 2;
+
+    // Glass pitcher
+    cx.save(); cx.translate(jX, jY); cx.rotate(0.42);
+    // body glass
+    const pgH=42, pgW=30;
+    cx.beginPath();
+    cx.moveTo(-pgW/2+4,  -pgH/2);
+    cx.lineTo( pgW/2-4,  -pgH/2);
+    cx.lineTo( pgW/2,     pgH/2);
+    cx.lineTo(-pgW/2,     pgH/2);
+    cx.closePath();
+    cx.fillStyle='rgba(255,230,160,.12)';
+    cx.strokeStyle='rgba(255,200,100,.4)'; cx.lineWidth=1.5;
+    cx.fill(); cx.stroke();
+    // syrup inside pitcher
+    cx.beginPath();
+    cx.rect(-pgW/2+2, 2, pgW-4, pgH/2-4);
+    cx.fillStyle='rgba(190,90,8,.65)'; cx.fill();
+    // glass shine
+    cx.beginPath();
+    cx.moveTo(-pgW/2+5,-pgH/2+5); cx.lineTo(-pgW/2+10,-pgH/2+5);
+    cx.lineTo(-pgW/2+8,pgH/2-6);  cx.lineTo(-pgW/2+3,pgH/2-6);
+    cx.fillStyle='rgba(255,240,180,.12)'; cx.fill();
+    // pour spout
+    cx.beginPath();
+    cx.moveTo(-4,-pgH/2); cx.lineTo(4,-pgH/2); cx.lineTo(2,-pgH/2-6); cx.lineTo(-2,-pgH/2-6);
+    cx.fillStyle='rgba(200,160,80,.4)'; cx.fill();
+    cx.restore();
+
+    if(pour<=0) return;
+
+    // Syrup stream — wavy + tapers
+    cx.save();
+    const wave_amp = 2.5;
+    const baseW = 6*(0.8+.2*Math.sin(t*4.5));
+
+    const streamG=cx.createLinearGradient(sX,jY,sX,sEndY);
+    streamG.addColorStop(0,'#f0a020');
+    streamG.addColorStop(.4,'#c86808');
+    streamG.addColorStop(.8,'#e89528');
+    streamG.addColorStop(1,'#f0a020');
+
+    cx.beginPath();
+    cx.moveTo(sX, jY+18);
+    const steps=40;
+    for(let i=0;i<=steps;i++){
+      const frac=i/steps;
+      const yy=jY+18+(sEndY-(jY+18))*frac;
+      const waveX=sX + Math.sin((yy+t*100)*.12)*wave_amp;
+      const taper=1-frac*.3;
+      if(i===0) cx.moveTo(waveX, yy);
+      else cx.lineTo(waveX, yy);
+    }
+    cx.strokeStyle=streamG;
+    cx.lineWidth=baseW; cx.lineCap='round'; cx.stroke();
+
+    // stream highlight (inner shine)
+    cx.beginPath();
+    for(let i=0;i<=steps;i++){
+      const frac=i/steps;
+      const yy=jY+18+(sEndY-(jY+18))*frac;
+      const waveX=sX + Math.sin((yy+t*100)*.12)*wave_amp - 1.5;
+      if(i===0) cx.moveTo(waveX,yy); else cx.lineTo(waveX,yy);
+    }
+    cx.strokeStyle=rgb(255,200,100,.35);
+    cx.lineWidth=2.5; cx.stroke();
+
+    // Impact splatter
+    if(pour>.35){
+      const splashX=sX+Math.sin(t*100*.12)*wave_amp;
+      cx.beginPath();
+      cx.ellipse(splashX,sEndY,baseW*2.5,baseW*.9,0,0,Math.PI*2);
+      cx.fillStyle=rgb(190,90,8,.4); cx.fill();
+      cx.beginPath();
+      cx.ellipse(splashX,sEndY,baseW*4.5,baseW*.5,0,0,Math.PI*2);
+      cx.fillStyle=rgb(190,90,8,.2); cx.fill();
+      // micro droplets
+      for(let d=0;d<5;d++){
+        const da=(d/5)*Math.PI*2+t*2;
+        const dr=baseW*2+d*2;
+        cx.beginPath();
+        cx.arc(splashX+Math.cos(da)*dr, sEndY+Math.sin(da)*dr*.4-2, 2, 0, Math.PI*2);
+        cx.fillStyle=rgb(190,90,8,.5); cx.fill();
+      }
+    }
+    cx.restore();
+  }
+
+  /* ─── BERRIES ─── */
+  const BERRIES=[
+    {rx:-.20,ry:-.70,r:14,  type:'S'},
+    {rx: .13,ry:-.78,r:10.5,type:'B'},
+    {rx:-.05,ry:-.72,r:9.5, type:'B'},
+    {rx: .27,ry:-.65,r:12,  type:'R'},
+    {rx:-.30,ry:-.76,r:10,  type:'B'},
+    {rx: .06,ry:-.60,r:9,   type:'B'},
+    {rx: .35,ry:-.75,r:8.5, type:'R'},
+    {rx:-.17,ry:-.60,r:8.5, type:'R'},
+    {rx: .20,ry:-.58,r:11,  type:'S'},
+    {rx:-.36,ry:-.62,r:8,   type:'B'},
+    {rx: .00,ry:-.82,r:9,   type:'B'},
+    {rx:-.12,ry:-.86,r:8,   type:'R'},
   ];
 
-  function drawBerry(x, y, r, type){
-    ctx.save();
-    ctx.translate(x, y);
-    if(type==='blueberry'){
-      const g=ctx.createRadialGradient(-r*.3,-r*.3,0, 0,0,r);
-      g.addColorStop(0,'#9999ee');
-      g.addColorStop(.6,'#4444bb');
-      g.addColorStop(1,'#1a1a55');
-      ctx.beginPath();
-      ctx.arc(0,0,r,0,Math.PI*2);
-      ctx.fillStyle=g;
-      ctx.fill();
-      // crown ring
-      ctx.beginPath();
-      ctx.arc(0,-r*.65,r*.26,0,Math.PI*2);
-      ctx.strokeStyle='rgba(150,150,255,.5)';
-      ctx.lineWidth=1.2;
-      ctx.stroke();
-    } else if(type==='strawberry'){
-      ctx.save();
-      ctx.scale(1, 1.25);
-      const g=ctx.createRadialGradient(-r*.3,-r*.2,0, 0,0,r);
-      g.addColorStop(0,'#ff7070');
-      g.addColorStop(.55,'#cc2020');
-      g.addColorStop(1,'#7a0a0a');
-      ctx.beginPath();
-      ctx.arc(0,0,r,0,Math.PI*2);
-      ctx.fillStyle=g;
-      ctx.fill();
-      ctx.restore();
+  function berry(x,y,r,type){
+    cx.save(); cx.translate(x,y);
+    if(type==='B'){
+      // Blueberry
+      const g=cx.createRadialGradient(-r*.3,-r*.35,0,0,0,r);
+      g.addColorStop(0, '#aaaaff'); g.addColorStop(.45,'#5555cc');
+      g.addColorStop(.75,'#2a2a88'); g.addColorStop(1,'#10104a');
+      cx.beginPath(); cx.arc(0,0,r,0,Math.PI*2);
+      cx.fillStyle=g; cx.fill();
+      // specular
+      cx.beginPath(); cx.ellipse(-r*.28,-r*.32,r*.22,r*.12,-0.4,0,Math.PI*2);
+      cx.fillStyle=rgb(200,200,255,.4); cx.fill();
+      // crown
+      cx.beginPath(); cx.arc(0,-r*.7,r*.22,0,Math.PI*2);
+      cx.strokeStyle=rgb(120,120,220,.5); cx.lineWidth=1.5; cx.stroke();
+    } else if(type==='S'){
+      // Strawberry
+      cx.save(); cx.scale(1,1.2);
+      const g=cx.createRadialGradient(-r*.3,-r*.2,0,0,0,r);
+      g.addColorStop(0,'#ff8080');g.addColorStop(.4,'#ee2020');
+      g.addColorStop(.8,'#bb0010');g.addColorStop(1,'#750008');
+      cx.beginPath(); cx.arc(0,0,r,0,Math.PI*2);
+      cx.fillStyle=g; cx.fill();
+      cx.restore();
       // seeds
-      for(let i=0;i<6;i++){
-        const a=(i/6)*Math.PI*2+.4;
-        ctx.beginPath();
-        ctx.ellipse(Math.cos(a)*r*.55,Math.sin(a)*r*.55,1.2,2,a,0,Math.PI*2);
-        ctx.fillStyle='rgba(255,200,180,.5)';
-        ctx.fill();
+      for(let i=0;i<8;i++){
+        const a=(i/8)*Math.PI*2+.3;
+        cx.beginPath();
+        cx.ellipse(Math.cos(a)*r*.52,Math.sin(a)*r*.52,1.4,2.2,a,0,Math.PI*2);
+        cx.fillStyle=rgb(255,180,160,.55); cx.fill();
       }
-      // leaves
-      ctx.beginPath();
+      // highlight
+      cx.beginPath(); cx.ellipse(-r*.25,-r*.3,r*.2,r*.1,-0.5,0,Math.PI*2);
+      cx.fillStyle=rgb(255,220,200,.35); cx.fill();
+      // green leaves
+      cx.save(); cx.translate(0,-r*.85);
       for(let i=0;i<5;i++){
-        const a=(i/5)*Math.PI*2-Math.PI/2;
-        const lx=Math.cos(a)*r*.85, ly=Math.sin(a)*r*.85-r*.8;
-        if(i===0) ctx.moveTo(lx,ly); else ctx.lineTo(lx,ly);
+        const a=(i/5)*Math.PI*2;
+        cx.beginPath();
+        cx.moveTo(0,0);
+        cx.bezierCurveTo(Math.cos(a)*r*.6,Math.sin(a)*r*.6,
+          Math.cos(a+.3)*r*.9,Math.sin(a+.3)*r*.9-r*.2,
+          Math.cos(a+.6)*r*.5,Math.sin(a+.6)*r*.5);
+        cx.fillStyle=i%2===0?'#2a9a15':'#1f7a10';
+        cx.fill();
       }
-      ctx.fillStyle='#2a8a15';
-      ctx.fill();
+      cx.restore();
     } else {
-      // raspberry – cluster
-      const pts=[{x:0,y:-r*.5},{x:-r*.55,y:r*.1},{x:r*.55,y:r*.1},{x:-r*.25,y:r*.7},{x:r*.25,y:r*.7}];
-      pts.forEach((p,i)=>{
-        const g=ctx.createRadialGradient(p.x-2,p.y-2,0,p.x,p.y,r*.5);
-        g.addColorStop(0,'#ff5570');
-        g.addColorStop(1,'#990015');
-        ctx.beginPath();
-        ctx.arc(p.x,p.y,r*.5,0,Math.PI*2);
-        ctx.fillStyle=g;
-        ctx.fill();
+      // Raspberry
+      const drupes=[
+        {x:0,y:-r*.52},{x:-r*.55,y:r*.05},{x:r*.55,y:r*.05},
+        {x:-r*.28,y:r*.62},{x:r*.28,y:r*.62}
+      ];
+      drupes.forEach(d=>{
+        const dg=cx.createRadialGradient(d.x-2,d.y-2,0,d.x,d.y,r*.52);
+        dg.addColorStop(0,'#ff6680'); dg.addColorStop(.5,'#cc1030');
+        dg.addColorStop(1,'#880015');
+        cx.beginPath(); cx.arc(d.x,d.y,r*.52,0,Math.PI*2);
+        cx.fillStyle=dg; cx.fill();
+        cx.beginPath(); cx.ellipse(d.x-1.5,d.y-1.5,r*.18,r*.1,-0.5,0,Math.PI*2);
+        cx.fillStyle=rgb(255,180,190,.4); cx.fill();
       });
     }
-    ctx.restore();
+    cx.restore();
   }
 
-  /* ---- animated syrup pour (pitcher + stream) ---- */
-  function drawPour(progress, jitterX, topWaffleCY, ww, sk){
-    const jX = CW*.74 + jitterX + sk*.1;
-    const jY = CH*.07;
-    const streamSX = jX - 8;
-    const streamEY = topWaffleCY + 4;
-
-    // Pitcher glass body
-    ctx.save();
-    ctx.translate(jX, jY);
-    ctx.rotate(0.38);
-    // pitcher body
-    ctx.beginPath();
-    ctx.rect(-13,-22,26,38);
-    ctx.fillStyle='rgba(210,170,80,.18)';
-    ctx.strokeStyle='rgba(210,170,80,.45)';
-    ctx.lineWidth=1.5;
-    ctx.fill(); ctx.stroke();
-    // syrup inside
-    ctx.beginPath();
-    ctx.rect(-11,-2,22,16);
-    ctx.fillStyle='rgba(190,100,10,.55)';
-    ctx.fill();
-    // handle
-    ctx.beginPath();
-    ctx.arc(16, 0, 10, -Math.PI*.5, Math.PI*.5);
-    ctx.strokeStyle='rgba(210,170,80,.4)';
-    ctx.lineWidth=4;
-    ctx.stroke();
-    ctx.restore();
-
-    if(progress<=0) return;
-
-    // Stream
-    const streamH = streamEY - (jY+14);
-    ctx.save();
-    ctx.beginPath();
-    let sy = jY+14;
-    ctx.moveTo(streamSX, sy);
-    while(sy < streamEY){
-      const wave = Math.sin((sy + tick*90)*.13)*2.5;
-      sy += 5;
-      ctx.lineTo(streamSX + wave, sy);
-    }
-    const sw = 5*(0.85 + .15*Math.sin(tick*4));
-    const sg = ctx.createLinearGradient(streamSX,jY,streamSX,streamEY);
-    sg.addColorStop(0,'#e8952a');
-    sg.addColorStop(.5,'#c8680a');
-    sg.addColorStop(1,'#e8952a');
-    ctx.strokeStyle=sg;
-    ctx.lineWidth=sw;
-    ctx.lineCap='round';
-    ctx.stroke();
-
-    // splash pool
-    if(progress>.4){
-      ctx.beginPath();
-      ctx.ellipse(streamSX, streamEY, sw*3.5, sw*1.3, 0, 0, Math.PI*2);
-      ctx.fillStyle='rgba(200,104,10,.35)';
-      ctx.fill();
-    }
-    ctx.restore();
+  /* ─── PLATE ─── */
+  function plate(cx2,cy2,ww){
+    // outer shadow
+    cx.beginPath();
+    cx.ellipse(cx2,cy2+12,ww*.54,18,0,0,Math.PI*2);
+    const sg=cx.createRadialGradient(cx2,cy2+10,0,cx2,cy2+10,ww*.54);
+    sg.addColorStop(0,'rgba(0,0,0,.65)'); sg.addColorStop(1,'rgba(0,0,0,0)');
+    cx.fillStyle=sg; cx.fill();
+    // plate rim
+    cx.beginPath(); cx.ellipse(cx2,cy2+4,ww*.51,20,0,0,Math.PI*2);
+    const rimG=cx.createLinearGradient(cx2-ww*.5,cy2,cx2+ww*.5,cy2+4);
+    rimG.addColorStop(0,'#3a2010'); rimG.addColorStop(.5,'#5a3520'); rimG.addColorStop(1,'#2a1008');
+    cx.fillStyle=rimG; cx.fill();
+    // plate surface
+    cx.beginPath(); cx.ellipse(cx2,cy2+2,ww*.46,15,0,0,Math.PI*2);
+    cx.fillStyle='#1e0e06'; cx.fill();
+    // plate highlight
+    cx.beginPath(); cx.ellipse(cx2-ww*.12,cy2-1,ww*.2,5,-0.2,0,Math.PI*2);
+    cx.fillStyle='rgba(255,180,100,.1)'; cx.fill();
   }
 
-  /* ---- main render loop ---- */
+  /* ─── MAIN RENDER ─── */
   function render(){
-    tick += 0.007;
-    ctx.clearRect(0,0,CW,CH);
+    t+=.0065;
+    cx.clearRect(0,0,W,H);
 
-    const cx   = CW * .48;
-    const floatY = Math.sin(tick*1.4)*4.5;
-    const skewX  = Math.sin(tick*.85)*11;
+    const centX   = W*.47;
+    const floatY  = Math.sin(t*1.5)*5;
+    const sway    = Math.sin(t*.9)*12;   // horizontal sway = perspective shift
+    const tilt    = Math.sin(t*.7)*8;    // slight rotation feel via skew
 
-    const WW = CW * .72;
-    const WH = CH * .11;
-    const GAP= CH * .072;
-    const baseY = CH * .76 + floatY;
+    const WW   = W*.73;
+    const WH   = H*.107;
+    const GAP  = H*.074;
+    const baseY= H*.77+floatY;
 
-    /* plate shadow */
-    ctx.beginPath();
-    ctx.ellipse(cx, baseY+WH*.5+10, WW*.52, 13, 0, 0, Math.PI*2);
-    const psG=ctx.createRadialGradient(cx,baseY+WH*.5+6,0, cx,baseY+WH*.5,WW*.52);
-    psG.addColorStop(0,'rgba(0,0,0,.55)');
-    psG.addColorStop(1,'rgba(0,0,0,0)');
-    ctx.fillStyle=psG;
-    ctx.fill();
+    /* Plate */
+    plate(centX, baseY+WH*.5, WW);
 
-    /* plate */
-    ctx.beginPath();
-    ctx.ellipse(cx, baseY+WH*.5+5, WW*.50, 17, 0, 0, Math.PI*2);
-    ctx.fillStyle='#2a1a10';
-    ctx.fill();
-    ctx.beginPath();
-    ctx.ellipse(cx, baseY+WH*.5+3, WW*.45, 12, 0, 0, Math.PI*2);
-    ctx.fillStyle='#1c1008';
-    ctx.fill();
+    /* ── 3 waffle slabs ── */
+    slab(centX, baseY,        WW,     WH, sway,  0);
+    slab(centX, baseY-GAP,    WW*.96, WH, sway,  9);
+    slab(centX, baseY-GAP*2,  WW*.93, WH, sway, 17);
 
-    /* 3 waffle slabs — bottom first */
-    drawWaffleSlab(cx, baseY,        WW,      WH, skewX,  0);
-    drawWaffleSlab(cx, baseY-GAP,    WW*.97,  WH, skewX,  7);
-    drawWaffleSlab(cx, baseY-GAP*2,  WW*.94,  WH, skewX, 14);
+    /* Syrup between layers */
+    syrupLayer(centX, baseY-GAP,   WW*.96, WH, sway, .55);
+    syrupLayer(centX, baseY-GAP*2, WW*.93, WH, sway, .72);
 
-    /* syrup drizzle layers */
-    drawSyrupDrizzle(cx, baseY-GAP,   WW*.97, WH, skewX, .55);
-    drawSyrupDrizzle(cx, baseY-GAP*2, WW*.94, WH, skewX, .7);
+    /* Butter on top slab */
+    drawButter(centX, baseY-GAP*2 - WH*.35, WW*.93, sway);
 
-    /* berries on top slab */
-    const topCY  = baseY - GAP*2;
-    const berryY = topCY - WH*.5 - 2 + floatY;
-    BERRY_LIST.forEach(b=>{
-      const bx = cx + b.rx*WW*.9 + skewX*(b.ry+.5)*.15;
-      const by = berryY + b.ry*WH*2.2;
-      drawBerry(bx, by, b.r*13, b.type);
+    /* Berries on top slab */
+    const topCentY = baseY - GAP*2;
+    const berryBaseY = topCentY - WH*.5 - 2 + floatY;
+    BERRIES.forEach(b=>{
+      const bx = centX + b.rx*WW*.88 + sway*(b.ry+.5)*.18;
+      const by = berryBaseY + b.ry*WH*2.4;
+      berry(bx, by, b.r, b.type);
     });
 
-    /* syrup pour */
-    const pourP = .5 + Math.sin(tick*.65)*.28;
-    drawPour(pourP, skewX*.15, topCY - WH*.5 + floatY, WW, skewX);
+    /* Animated syrup pour */
+    const pourAmt = .52 + Math.sin(t*.6)*.3;
+    pourSyrup(pourAmt, topCentY - WH*.5 + floatY, WW, sway);
+
+    /* Steam wisps above waffles */
+    for(let s=0;s<3;s++){
+      const sx = centX + (s-1)*WW*.2 + Math.sin(t*1.2+s*2)*8;
+      const steamTop = topCentY - WH*.5 - 45 - s*10 + floatY;
+      const steamAlpha = (.15 + .08*Math.sin(t*2+s))*(Math.sin(t*.8+s)*.5+.5);
+      cx.save();
+      const stG=cx.createLinearGradient(sx,steamTop+40,sx,steamTop);
+      stG.addColorStop(0,rgb(255,200,150,steamAlpha)); stG.addColorStop(1,rgb(255,200,150,0));
+      cx.strokeStyle=stG; cx.lineWidth=3; cx.lineCap='round';
+      cx.beginPath();
+      cx.moveTo(sx, steamTop+40);
+      cx.bezierCurveTo(sx+12,steamTop+25, sx-12,steamTop+12, sx+8,steamTop);
+      cx.stroke();
+      cx.restore();
+    }
 
     requestAnimationFrame(render);
   }
   render();
 }
 
-buildWaffleScene('waffleCanvas');
-buildWaffleScene('miniCanvas');
+buildScene('waffleCanvas');
+buildScene('miniCanvas');
 
-/* embers */
+/* ── EMBER PARTICLES ── */
 const ec=document.getElementById('embers');
-for(let i=0;i<30;i++){
+for(let i=0;i<35;i++){
   const e=document.createElement('div');
   e.className='ember';
-  const s=Math.random()*5+2;
-  e.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;
-    animation-duration:${Math.random()*6+4}s;animation-delay:${Math.random()*8}s;
-    background:hsl(${28+Math.random()*20},90%,${50+Math.random()*20}%);`;
+  const s=Math.random()*6+1.5;
+  const hue=Math.floor(20+Math.random()*25);
+  const lit=Math.floor(45+Math.random()*30);
+  e.style.cssText=`
+    width:${s}px;height:${s}px;
+    left:${Math.random()*100}%;
+    animation-duration:${Math.random()*7+4}s;
+    animation-delay:${Math.random()*9}s;
+    background:hsl(${hue},90%,${lit}%);
+    box-shadow:0 0 ${s*2}px hsl(${hue},90%,${lit}%);
+  `;
   ec.appendChild(e);
 }
 
-/* scroll reveal */
-const obs=new IntersectionObserver(es=>{
-  es.forEach(e=>{ if(e.isIntersecting) e.target.style.animation='fadeUp .5s ease both'; });
+/* ── SCROLL REVEAL ── */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      e.target.style.opacity='0';
+      e.target.style.animation=`fadeUp .55s ${i*.07}s ease both`;
+    }
+  });
 },{threshold:.1});
 document.querySelectorAll('.menu-item,.feat').forEach(el=>obs.observe(el));
 </script>
