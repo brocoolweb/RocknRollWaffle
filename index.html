@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Rock n Roll Waffle – Vesu, Surat</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Permanent+Marker&family=Barlow:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --black:#080503;--darkbrown:#160c04;--brown:#3a1c08;
+  --mid:#6b3a1f;--warm:#a05c2c;--gold:#d4862a;
+  --amber:#e8a040;--cream:#f5deb3;--smoke:#120a04;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--black);color:var(--cream);font-family:'Barlow',sans-serif;overflow-x:hidden;}
+
+nav{position:fixed;top:0;width:100%;z-index:200;
+background:linear-gradient(to bottom,rgba(8,5,3,.96) 60%,transparent);
+display:flex;justify-content:space-between;align-items:center;padding:1rem 2.5rem;}
+.logo{font-family:‘Permanent Marker’,cursive;font-size:1.6rem;color:var(–gold);
+letter-spacing:1px;text-shadow:0 0 20px rgba(212,134,42,.5);}
+.logo span{color:var(–cream);}
+nav ul{list-style:none;display:flex;gap:2rem;}
+nav ul a{text-decoration:none;color:var(–cream);font-weight:600;letter-spacing:1px;
+font-size:.85rem;text-transform:uppercase;transition:color .3s;}
+nav ul a:hover{color:var(–gold);}
+
+#hero{min-height:100vh;display:flex;flex-direction:column;
+justify-content:center;align-items:center;text-align:center;
+position:relative;overflow:hidden;
+background:radial-gradient(ellipse at 30% 60%,rgba(58,28,8,.7),transparent 55%),
+radial-gradient(ellipse at 70% 40%,rgba(22,12,4,.9),transparent 60%),var(–black);
+padding:6rem 1rem 3rem;}
+
+#waffleCanvas{display:block;margin:0 auto 2rem;
+filter:drop-shadow(0 20px 60px rgba(212,134,42,.35));}
+
+.hero-tag{font-family:‘Bebas Neue’,sans-serif;
+font-size:clamp(3.2rem,10vw,7.5rem);line-height:.9;color:var(–gold);
+text-shadow:4px 4px 0 var(–brown),0 0 80px rgba(212,134,42,.35);
+animation:fadeUp 1s ease both;}
+.hero-tag span{color:var(–cream);display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(40px);}to{opacity:1;transform:translateY(0);}}
+.hero-sub{margin:.8rem 0 2rem;font-size:1rem;letter-spacing:3px;text-transform:uppercase;
+color:var(–warm);font-weight:300;animation:fadeUp .8s .3s ease both;}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;animation:fadeUp .8s .5s ease both;}
+.btn{padding:.8rem 2rem;border-radius:3px;font-family:‘Bebas Neue’;font-size:1.1rem;
+letter-spacing:2px;cursor:pointer;transition:all .3s;text-decoration:none;display:inline-block;}
+.btn-primary{background:var(–gold);color:var(–black);border:2px solid var(–gold);}
+.btn-primary:hover{background:transparent;color:var(–gold);}
+.btn-outline{background:transparent;color:var(–cream);border:2px solid var(–cream);}
+.btn-outline:hover{background:var(–cream);color:var(–black);}
+
+.embers{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.ember{position:absolute;border-radius:50%;animation:floatUp linear infinite;opacity:0;}
+@keyframes floatUp{0%{transform:translateY(100vh) scale(1);opacity:.8;}80%{opacity:.3;}100%{transform:translateY(-10vh) scale(.2);opacity:0;}}
+
+.ticker{background:var(–gold);color:var(–black);font-family:‘Bebas Neue’;
+font-size:1.1rem;letter-spacing:3px;overflow:hidden;padding:.4rem 0;white-space:nowrap;}
+.ticker-inner{display:inline-block;animation:tick 20s linear infinite;}
+.ticker-inner span{margin:0 2rem;}
+@keyframes tick{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+section{padding:6rem 2rem;max-width:1100px;margin:0 auto;}
+.section-title{font-family:‘Bebas Neue’;font-size:clamp(2.5rem,6vw,4.5rem);
+color:var(–gold);letter-spacing:2px;margin-bottom:.5rem;
+position:relative;display:inline-block;}
+.section-title::after{content:’’;position:absolute;bottom:-6px;left:0;
+height:3px;width:60%;background:var(–warm);}
+.section-sub{color:var(–warm);letter-spacing:2px;font-size:.85rem;
+text-transform:uppercase;margin-bottom:3rem;}
+
+/* MENU – names only */
+.menu-list{display:flex;flex-direction:column;gap:0;}
+.menu-item{display:flex;align-items:center;gap:1.5rem;
+padding:1.4rem 0;border-bottom:1px solid rgba(107,58,31,.35);
+position:relative;overflow:hidden;transition:padding-left .3s;cursor:default;}
+.menu-item::before{content:’’;position:absolute;left:0;top:0;height:100%;width:3px;
+background:var(–gold);transform:scaleY(0);transform-origin:bottom;transition:transform .3s;}
+.menu-item:hover::before{transform:scaleY(1);}
+.menu-item:hover{padding-left:1rem;}
+.menu-item-num{font-family:‘Bebas Neue’;font-size:1rem;color:var(–mid);letter-spacing:2px;flex-shrink:0;}
+.menu-item-name{font-family:‘Bebas Neue’;font-size:clamp(1.5rem,3.5vw,2.2rem);
+color:var(–cream);letter-spacing:2px;transition:color .3s;flex:1;}
+.menu-item:hover .menu-item-name{color:var(–gold);}
+.menu-tag{background:var(–gold);color:var(–black);font-size:.65rem;font-weight:700;
+letter-spacing:1px;padding:.15rem .55rem;border-radius:20px;margin-left:.8rem;vertical-align:middle;}
+
+#showcase{background:var(–darkbrown);border-top:1px solid var(–brown);
+border-bottom:1px solid var(–brown);padding:5rem 2rem;text-align:center;}
+.showcase-inner{max-width:1100px;margin:0 auto;}
+.features{display:flex;flex-wrap:wrap;gap:1.5rem;justify-content:center;margin-top:3rem;}
+.feat{flex:1;min-width:160px;max-width:200px;background:var(–smoke);
+border:1px solid var(–brown);border-radius:10px;padding:1.5rem 1rem;text-align:center;
+transition:border-color .3s,transform .3s;}
+.feat:hover{border-color:var(–gold);transform:translateY(-5px);}
+.feat-icon{font-size:2.5rem;margin-bottom:.6rem;}
+.feat-name{font-family:‘Bebas Neue’;font-size:1.1rem;color:var(–gold);letter-spacing:1px;margin-bottom:.3rem;}
+.feat-text{font-size:.82rem;color:#c9a87c;line-height:1.5;}
+
+.about-wrap{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
+@media(max-width:700px){.about-wrap{grid-template-columns:1fr;}}
+.about-text p{color:#c9a87c;line-height:1.8;margin-bottom:1rem;}
+.about-badge{display:inline-block;border:2px solid var(–gold);padding:.4rem 1rem;
+font-family:‘Bebas Neue’;letter-spacing:2px;color:var(–gold);font-size:1rem;margin-bottom:1.5rem;}
+.about-visual{display:flex;align-items:center;justify-content:center;}
+#miniCanvas{display:block;filter:drop-shadow(0 10px 40px rgba(212,134,42,.3));}
+
+#location{text-align:center;}
+.loc-card{background:var(–darkbrown);border:1px solid var(–brown);border-radius:16px;
+padding:3rem 2rem;max-width:680px;margin:0 auto;position:relative;overflow:hidden;}
+.loc-card::before{content:‘📍’;position:absolute;top:-20px;right:-20px;font-size:8rem;opacity:.05;}
+.loc-icon{font-size:3rem;margin-bottom:.8rem;}
+.loc-name{font-family:‘Bebas Neue’;font-size:2.5rem;color:var(–gold);letter-spacing:2px;}
+.loc-addr{color:#c9a87c;font-size:1rem;line-height:1.8;margin:.8rem 0 1.5rem;}
+.loc-grid{display:flex;justify-content:center;gap:2.5rem;flex-wrap:wrap;margin:1.5rem 0;}
+.loc-item{text-align:center;}
+.loc-item-icon{font-size:1.8rem;margin-bottom:.2rem;}
+.loc-item-label{font-family:‘Bebas Neue’;color:var(–gold);font-size:.9rem;letter-spacing:1px;}
+.loc-item-val{font-size:.82rem;color:#c9a87c;}
+.map-embed{border-radius:12px;overflow:hidden;margin-top:2rem;border:2px solid var(–brown);}
+.map-embed iframe{display:block;width:100%;height:300px;}
+
+footer{background:var(–smoke);border-top:1px solid var(–brown);padding:3rem 2rem;text-align:center;}
+.footer-logo{font-family:‘Permanent Marker’;font-size:2rem;color:var(–gold);margin-bottom:.5rem;}
+.footer-tagline{color:var(–warm);font-size:.88rem;letter-spacing:2px;margin-bottom:1.5rem;}
+.footer-links{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;margin-bottom:1.5rem;}
+.footer-links a{color:#c9a87c;text-decoration:none;font-size:.85rem;text-transform:uppercase;letter-spacing:1px;transition:color .3s;}
+.footer-links a:hover{color:var(–gold);}
+.footer-copy{color:var(–mid);font-size:.78rem;}
+@media(max-width:600px){nav ul{display:none;}}
+</style>
+
+</head>
+<body>
+
+<nav>
+  <div class="logo">Rock n Roll <span>Waffle</span></div>
+  <ul>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#location">Find Us</a></li>
+  </ul>
+</nav>
+
+<div class="embers" id="embers"></div>
+
+<header id="hero">
+  <canvas id="waffleCanvas" width="440" height="400"></canvas>
+  <h1 class="hero-tag">Rock n Roll<span>Waffle</span></h1>
+  <p class="hero-sub">🎸 Crispy · Stacked · Legendary · Vesu, Surat</p>
+  <div class="hero-btns">
+    <a href="#menu" class="btn btn-primary">Explore Menu</a>
+    <a href="#location" class="btn btn-outline">Find Us</a>
+  </div>
+</header>
+
+<div class="ticker">
+  <div class="ticker-inner">
+    <span>🧇 FRESH WAFFLES</span><span>🎸 ROCK THE PLATE</span>
+    <span>🍫 NUTELLA DRIZZLE</span><span>🍓 BERRY BLISS</span>
+    <span>🧇 CRISPY GOLDEN</span><span>🎸 VESU SURAT</span>
+    <span>🍦 ICE CREAM WAFFLES</span><span>💥 LOADED FLAVOURS</span>
+    <span>🧇 FRESH WAFFLES</span><span>🎸 ROCK THE PLATE</span>
+    <span>🍫 NUTELLA DRIZZLE</span><span>🍓 BERRY BLISS</span>
+    <span>🧇 CRISPY GOLDEN</span><span>🎸 VESU SURAT</span>
+    <span>🍦 ICE CREAM WAFFLES</span><span>💥 LOADED FLAVOURS</span>
+  </div>
+</div>
+
+<section id="menu">
+  <div class="section-title">The Menu</div>
+  <p class="section-sub">Every waffle is a performance 🎸</p>
+  <div class="menu-list">
+    <div class="menu-item">
+      <span class="menu-item-num">01</span>
+      <span class="menu-item-name">Classic Butter Waffle <span class="menu-tag">⭐ BESTSELLER</span></span>
+    </div>
+    <div class="menu-item">
+      <span class="menu-item-num">02</span>
+      <span class="menu-item-name">Nutella Overload <span class="menu-tag">🔥 HOT</span></span>
+    </div>
+    <div class="menu-item">
+      <span class="menu-item-num">03</span>
+      <span class="menu-item-name">Berry Blast</span>
+    </div>
+    <div class="menu-item">
+      <span class="menu-item-num">04</span>
+      <span class="menu-item-name">Ice Cream Smash <span class="menu-tag">🆕 NEW</span></span>
+    </div>
+    <div class="menu-item">
+      <span class="menu-item-num">05</span>
+      <span class="menu-item-name">Peanut Butter Riot</span>
+    </div>
+    <div class="menu-item">
+      <span class="menu-item-num">06</span>
+      <span class="menu-item-name">Masala Cheese Waffle <span class="menu-tag">🌶 SPICY</span></span>
+    </div>
+    <div class="menu-item">
+      <span class="menu-item-num">07</span>
+      <span class="menu-item-name">Choco Lava Stack</span>
+    </div>
+    <div class="menu-item">
+      <span class="menu-item-num">08</span>
+      <span class="menu-item-name">Honey Almond Crunch</span>
+    </div>
+  </div>
+</section>
+
+<div id="showcase">
+  <div class="showcase-inner">
+    <div class="section-title" style="display:block;text-align:center;">Why Rock n Roll?</div>
+    <p class="section-sub" style="text-align:center;">Handcrafted. Fresh. Every. Single. Time.</p>
+    <div class="features">
+      <div class="feat"><div class="feat-icon">🔥</div><div class="feat-name">Fresh Iron</div><div class="feat-text">Made hot on the spot, every order from scratch.</div></div>
+      <div class="feat"><div class="feat-icon">🧈</div><div class="feat-name">Real Butter</div><div class="feat-text">Only premium real butter — no substitutes.</div></div>
+      <div class="feat"><div class="feat-icon">🎸</div><div class="feat-name">Rock Vibes</div><div class="feat-text">Eat to the beat — bold flavours, bold attitude.</div></div>
+      <div class="feat"><div class="feat-icon">🍓</div><div class="feat-name">Fresh Berries</div><div class="feat-text">Topped with the freshest seasonal fruit daily.</div></div>
+      <div class="feat"><div class="feat-icon">⚡</div><div class="feat-name">5 Min Ready</div><div class="feat-text">Quick service — your waffle never keeps you waiting.</div></div>
+    </div>
+  </div>
+</div>
+
+<section id="about">
+  <div class="about-wrap">
+    <div class="about-text">
+      <div class="about-badge">Est. 2023 · Vesu, Surat</div>
+      <div class="section-title">Our Story</div>
+      <p class="section-sub" style="margin-bottom:1.5rem;">Born from a love of waffles & music</p>
+      <p>Rock n Roll Waffle was born in the heart of Vesu, Surat — a small stall with a big dream. We believed that waffles deserved the same energy as a rock concert: loud, bold, and absolutely unforgettable.</p>
+      <p>Every waffle we serve is crafted with premium ingredients, cooked golden-crispy on cast-iron irons, and topped with flavours that hit harder than a guitar riff.</p>
+      <p>From classic butter to berry explosions — something for every legend who walks up to our stall.</p>
+      <a href="#menu" class="btn btn-primary" style="margin-top:1rem;">View Full Menu</a>
+    </div>
+    <div class="about-visual">
+      <canvas id="miniCanvas" width="300" height="280"></canvas>
+    </div>
+  </div>
+</section>
+
+<section id="location" style="max-width:800px;">
+  <div style="text-align:center;margin-bottom:2rem;">
+    <div class="section-title">Find Us</div>
+    <p class="section-sub">We're waiting for you 🎸</p>
+  </div>
+  <div class="loc-card">
+    <div class="loc-icon">📍</div>
+    <div class="loc-name">Rock n Roll Waffle</div>
+    <div class="loc-addr">
+      Near Pooja Abhishek Apartment,<br>
+      Opposite Central Bazaar, Nr. Reliance Mart,<br>
+      Vesu, Surat – 395007, Gujarat, India
+    </div>
+    <div class="loc-grid">
+      <div class="loc-item"><div class="loc-item-icon">🕐</div><div class="loc-item-label">Hours</div><div class="loc-item-val">4:00 PM – 11:00 PM</div></div>
+      <div class="loc-item"><div class="loc-item-icon">📅</div><div class="loc-item-label">Days</div><div class="loc-item-val">Mon – Sun (Daily)</div></div>
+      <div class="loc-item"><div class="loc-item-icon">📞</div><div class="loc-item-label">Contact</div><div class="loc-item-val">+91 98765 43210</div></div>
+      <div class="loc-item"><div class="loc-item-icon">🛵</div><div class="loc-item-label">Delivery</div><div class="loc-item-val">Swiggy & Zomato</div></div>
+    </div>
+    <div class="map-embed">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3721.5!2d72.775!3d21.149!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjHCsDA4JzU2LjQiTiA3MsKwNDYnMzAuMCJF!5e0!3m2!1sen!2sin!4v1680000000000!5m2!1sen!2sin"
+        width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <div style="margin-top:1.5rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+      <a href="https://maps.google.com/?q=Pooja+Abhishek+Apartment+Vesu+Surat" target="_blank" class="btn btn-primary">Open in Google Maps</a>
+      <a href="tel:+919876543210" class="btn btn-outline">Call Us</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Rock n Roll Waffle 🧇</div>
+  <div class="footer-tagline">Crispy · Stacked · Legendary · Vesu, Surat</div>
+  <div class="footer-links">
+    <a href="#menu">Menu</a><a href="#about">About</a><a href="#location">Location</a>
+  </div>
+  <p class="footer-copy">© 2025 Rock n Roll Waffle. Near Pooja Abhishek Apartment, Vesu, Surat 395007.</p>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════════
+   REALISTIC STACKED WAFFLE CANVAS ANIMATION
+   3 stacked waffles + berries + animated syrup pour
+   Modelled after the uploaded photo
+═══════════════════════════════════════════════ */
+
+function buildWaffleScene(canvasId) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const CW = canvas.width, CH = canvas.height;
+  let tick = 0;
+
+  /* ---- helpers ---- */
+  function lerp(a, b, t){ return a + (b-a)*t; }
+  function clamp(v,mn,mx){ return Math.max(mn,Math.min(mx,v)); }
+  function shade(hex, amt){
+    let n=parseInt(hex.replace('#',''),16),
+        r=clamp((n>>16)+amt,0,255),
+        g=clamp(((n>>8)&255)+amt,0,255),
+        b=clamp((n&255)+amt,0,255);
+    return `rgb(${r},${g},${b})`;
+  }
+
+  /* ---- draw a single waffle slab ---- */
+  /* cx,cy = centre; ww,wh = width/height; skewX = horizontal skew px; brightness delta */
+  function drawWaffleSlab(cx, cy, ww, wh, skewX, brt) {
+    ctx.save();
+    ctx.translate(cx, cy);
+    const sk = skewX;
+
+    // outline / drop shadow
+    ctx.beginPath();
+    waffleShape(ctx, sk, ww, wh, 8);
+    ctx.shadowColor = 'rgba(0,0,0,.6)';
+    ctx.shadowBlur  = 16;
+    ctx.shadowOffsetY = 6;
+    ctx.fillStyle = shade('#6b3010', brt-18);
+    ctx.fill();
+    ctx.shadowColor = 'transparent';
+
+    // main body gradient
+    ctx.beginPath();
+    waffleShape(ctx, sk, ww, wh, 8);
+    const grd = ctx.createLinearGradient(-ww*.5, -wh*.5, ww*.5, wh*.5);
+    grd.addColorStop(0,   shade('#c4833a', brt+14));
+    grd.addColorStop(0.35,shade('#a05c2c', brt));
+    grd.addColorStop(0.7, shade('#7a3d10', brt-8));
+    grd.addColorStop(1,   shade('#5a2a08', brt-16));
+    ctx.fillStyle = grd;
+    ctx.fill();
+
+    // grid lines
+    const cols=4, rows=4;
+    const cw=ww/cols, ch=wh/rows;
+    ctx.strokeStyle = shade('#3a1808', brt-10);
+    ctx.lineWidth = 2.5;
+    for(let i=1;i<cols;i++){
+      const xPos = -ww/2 + i*cw;
+      const skTop = sk*(i/cols - .5)*2*.4;
+      const skBot = sk*(i/cols - .5)*2*.4;
+      ctx.beginPath();
+      ctx.moveTo(xPos + sk*.45 + skTop, -wh*.5+1);
+      ctx.lineTo(xPos - sk*.45 + skBot,  wh*.5-1);
+      ctx.stroke();
+    }
+    for(let j=1;j<rows;j++){
+      const yPos = -wh/2 + j*ch;
+      const ratio = j/rows - .5;
+      const xShift = sk * ratio;
+      ctx.beginPath();
+      ctx.moveTo(-ww/2+xShift+1, yPos);
+      ctx.lineTo( ww/2+xShift-1, yPos);
+      ctx.stroke();
+    }
+
+    // pocket cells — dark inner
+    for(let i=0;i<cols;i++){
+      for(let j=0;j<rows;j++){
+        const ratio = (j+.5)/rows - .5;
+        const xShift = sk*ratio;
+        const px = -ww/2 + i*cw + 5 + xShift;
+        const py = -wh/2 + j*ch + 5;
+        ctx.beginPath();
+        ctx.rect(px, py, cw-10, ch-10);
+        ctx.fillStyle = `rgba(0,0,0,${0.18 - brt*.001})`;
+        ctx.fill();
+        // inner highlight top-left
+        ctx.beginPath();
+        ctx.rect(px, py, cw-10, 3);
+        ctx.fillStyle = `rgba(255,200,120,0.08)`;
+        ctx.fill();
+      }
+    }
+
+    // top surface highlight strip
+    ctx.beginPath();
+    ctx.moveTo(-ww*.5 + sk*.5 + 8, -wh*.5 + 2);
+    ctx.lineTo( ww*.5 + sk*.5 - 8, -wh*.5 + 2);
+    ctx.strokeStyle = 'rgba(245,222,179,.22)';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  function waffleShape(ctx, sk, ww, wh, r){
+    const x=-ww/2, y=-wh/2, w=ww, h=wh;
+    const tl=sk*.5, tr=sk*.5, bl=-sk*.5, br=-sk*.5;
+    ctx.moveTo(x+tl+r, y);
+    ctx.lineTo(x+w+tr-r, y);
+    ctx.quadraticCurveTo(x+w+tr, y, x+w+tr, y+r);
+    ctx.lineTo(x+w+br, y+h-r);
+    ctx.quadraticCurveTo(x+w+br, y+h, x+w+br-r, y+h);
+    ctx.lineTo(x+bl+r, y+h);
+    ctx.quadraticCurveTo(x+bl, y+h, x+bl, y+h-r);
+    ctx.lineTo(x+tl, y+r);
+    ctx.quadraticCurveTo(x+tl, y, x+tl+r, y);
+    ctx.closePath();
+  }
+
+  /* ---- syrup drizzle on top of a slab ---- */
+  function drawSyrupDrizzle(cx, cy, ww, wh, sk, alpha){
+    if(alpha<=0) return;
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.globalAlpha = alpha;
+    ctx.strokeStyle = '#c8680a';
+    ctx.lineWidth   = 4;
+    ctx.lineCap = 'round';
+    const skips = [[-ww*.25, sk*.1],[ 0, 0],[ww*.22, -sk*.08]];
+    skips.forEach(([ox,oy])=>{
+      ctx.beginPath();
+      ctx.moveTo(ox+oy, -wh*.5+2);
+      ctx.bezierCurveTo(ox+oy+10, 0, ox-8, wh*.3, ox+oy+4, wh*.5+8);
+      ctx.stroke();
+    });
+    ctx.globalAlpha=1;
+    ctx.restore();
+  }
+
+  /* ---- berries ---- */
+  const BERRY_LIST = [
+    {rx:-.18, ry:-.55, r:1.35, type:'strawberry'},
+    {rx: .12, ry:-.65, r:1.0,  type:'blueberry'},
+    {rx:-.04, ry:-.58, r:0.9,  type:'blueberry'},
+    {rx: .25, ry:-.52, r:1.1,  type:'raspberry'},
+    {rx:-.28, ry:-.62, r:0.95, type:'blueberry'},
+    {rx: .04, ry:-.45, r:0.85, type:'blueberry'},
+    {rx: .32, ry:-.62, r:0.8,  type:'raspberry'},
+    {rx:-.15, ry:-.46, r:0.78, type:'raspberry'},
+    {rx: .18, ry:-.44, r:1.05, type:'strawberry'},
+    {rx:-.32, ry:-.50, r:0.72, type:'blueberry'},
+  ];
+
+  function drawBerry(x, y, r, type){
+    ctx.save();
+    ctx.translate(x, y);
+    if(type==='blueberry'){
+      const g=ctx.createRadialGradient(-r*.3,-r*.3,0, 0,0,r);
+      g.addColorStop(0,'#9999ee');
+      g.addColorStop(.6,'#4444bb');
+      g.addColorStop(1,'#1a1a55');
+      ctx.beginPath();
+      ctx.arc(0,0,r,0,Math.PI*2);
+      ctx.fillStyle=g;
+      ctx.fill();
+      // crown ring
+      ctx.beginPath();
+      ctx.arc(0,-r*.65,r*.26,0,Math.PI*2);
+      ctx.strokeStyle='rgba(150,150,255,.5)';
+      ctx.lineWidth=1.2;
+      ctx.stroke();
+    } else if(type==='strawberry'){
+      ctx.save();
+      ctx.scale(1, 1.25);
+      const g=ctx.createRadialGradient(-r*.3,-r*.2,0, 0,0,r);
+      g.addColorStop(0,'#ff7070');
+      g.addColorStop(.55,'#cc2020');
+      g.addColorStop(1,'#7a0a0a');
+      ctx.beginPath();
+      ctx.arc(0,0,r,0,Math.PI*2);
+      ctx.fillStyle=g;
+      ctx.fill();
+      ctx.restore();
+      // seeds
+      for(let i=0;i<6;i++){
+        const a=(i/6)*Math.PI*2+.4;
+        ctx.beginPath();
+        ctx.ellipse(Math.cos(a)*r*.55,Math.sin(a)*r*.55,1.2,2,a,0,Math.PI*2);
+        ctx.fillStyle='rgba(255,200,180,.5)';
+        ctx.fill();
+      }
+      // leaves
+      ctx.beginPath();
+      for(let i=0;i<5;i++){
+        const a=(i/5)*Math.PI*2-Math.PI/2;
+        const lx=Math.cos(a)*r*.85, ly=Math.sin(a)*r*.85-r*.8;
+        if(i===0) ctx.moveTo(lx,ly); else ctx.lineTo(lx,ly);
+      }
+      ctx.fillStyle='#2a8a15';
+      ctx.fill();
+    } else {
+      // raspberry – cluster
+      const pts=[{x:0,y:-r*.5},{x:-r*.55,y:r*.1},{x:r*.55,y:r*.1},{x:-r*.25,y:r*.7},{x:r*.25,y:r*.7}];
+      pts.forEach((p,i)=>{
+        const g=ctx.createRadialGradient(p.x-2,p.y-2,0,p.x,p.y,r*.5);
+        g.addColorStop(0,'#ff5570');
+        g.addColorStop(1,'#990015');
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,r*.5,0,Math.PI*2);
+        ctx.fillStyle=g;
+        ctx.fill();
+      });
+    }
+    ctx.restore();
+  }
+
+  /* ---- animated syrup pour (pitcher + stream) ---- */
+  function drawPour(progress, jitterX, topWaffleCY, ww, sk){
+    const jX = CW*.74 + jitterX + sk*.1;
+    const jY = CH*.07;
+    const streamSX = jX - 8;
+    const streamEY = topWaffleCY + 4;
+
+    // Pitcher glass body
+    ctx.save();
+    ctx.translate(jX, jY);
+    ctx.rotate(0.38);
+    // pitcher body
+    ctx.beginPath();
+    ctx.rect(-13,-22,26,38);
+    ctx.fillStyle='rgba(210,170,80,.18)';
+    ctx.strokeStyle='rgba(210,170,80,.45)';
+    ctx.lineWidth=1.5;
+    ctx.fill(); ctx.stroke();
+    // syrup inside
+    ctx.beginPath();
+    ctx.rect(-11,-2,22,16);
+    ctx.fillStyle='rgba(190,100,10,.55)';
+    ctx.fill();
+    // handle
+    ctx.beginPath();
+    ctx.arc(16, 0, 10, -Math.PI*.5, Math.PI*.5);
+    ctx.strokeStyle='rgba(210,170,80,.4)';
+    ctx.lineWidth=4;
+    ctx.stroke();
+    ctx.restore();
+
+    if(progress<=0) return;
+
+    // Stream
+    const streamH = streamEY - (jY+14);
+    ctx.save();
+    ctx.beginPath();
+    let sy = jY+14;
+    ctx.moveTo(streamSX, sy);
+    while(sy < streamEY){
+      const wave = Math.sin((sy + tick*90)*.13)*2.5;
+      sy += 5;
+      ctx.lineTo(streamSX + wave, sy);
+    }
+    const sw = 5*(0.85 + .15*Math.sin(tick*4));
+    const sg = ctx.createLinearGradient(streamSX,jY,streamSX,streamEY);
+    sg.addColorStop(0,'#e8952a');
+    sg.addColorStop(.5,'#c8680a');
+    sg.addColorStop(1,'#e8952a');
+    ctx.strokeStyle=sg;
+    ctx.lineWidth=sw;
+    ctx.lineCap='round';
+    ctx.stroke();
+
+    // splash pool
+    if(progress>.4){
+      ctx.beginPath();
+      ctx.ellipse(streamSX, streamEY, sw*3.5, sw*1.3, 0, 0, Math.PI*2);
+      ctx.fillStyle='rgba(200,104,10,.35)';
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  /* ---- main render loop ---- */
+  function render(){
+    tick += 0.007;
+    ctx.clearRect(0,0,CW,CH);
+
+    const cx   = CW * .48;
+    const floatY = Math.sin(tick*1.4)*4.5;
+    const skewX  = Math.sin(tick*.85)*11;
+
+    const WW = CW * .72;
+    const WH = CH * .11;
+    const GAP= CH * .072;
+    const baseY = CH * .76 + floatY;
+
+    /* plate shadow */
+    ctx.beginPath();
+    ctx.ellipse(cx, baseY+WH*.5+10, WW*.52, 13, 0, 0, Math.PI*2);
+    const psG=ctx.createRadialGradient(cx,baseY+WH*.5+6,0, cx,baseY+WH*.5,WW*.52);
+    psG.addColorStop(0,'rgba(0,0,0,.55)');
+    psG.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=psG;
+    ctx.fill();
+
+    /* plate */
+    ctx.beginPath();
+    ctx.ellipse(cx, baseY+WH*.5+5, WW*.50, 17, 0, 0, Math.PI*2);
+    ctx.fillStyle='#2a1a10';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(cx, baseY+WH*.5+3, WW*.45, 12, 0, 0, Math.PI*2);
+    ctx.fillStyle='#1c1008';
+    ctx.fill();
+
+    /* 3 waffle slabs — bottom first */
+    drawWaffleSlab(cx, baseY,        WW,      WH, skewX,  0);
+    drawWaffleSlab(cx, baseY-GAP,    WW*.97,  WH, skewX,  7);
+    drawWaffleSlab(cx, baseY-GAP*2,  WW*.94,  WH, skewX, 14);
+
+    /* syrup drizzle layers */
+    drawSyrupDrizzle(cx, baseY-GAP,   WW*.97, WH, skewX, .55);
+    drawSyrupDrizzle(cx, baseY-GAP*2, WW*.94, WH, skewX, .7);
+
+    /* berries on top slab */
+    const topCY  = baseY - GAP*2;
+    const berryY = topCY - WH*.5 - 2 + floatY;
+    BERRY_LIST.forEach(b=>{
+      const bx = cx + b.rx*WW*.9 + skewX*(b.ry+.5)*.15;
+      const by = berryY + b.ry*WH*2.2;
+      drawBerry(bx, by, b.r*13, b.type);
+    });
+
+    /* syrup pour */
+    const pourP = .5 + Math.sin(tick*.65)*.28;
+    drawPour(pourP, skewX*.15, topCY - WH*.5 + floatY, WW, skewX);
+
+    requestAnimationFrame(render);
+  }
+  render();
+}
+
+buildWaffleScene('waffleCanvas');
+buildWaffleScene('miniCanvas');
+
+/* embers */
+const ec=document.getElementById('embers');
+for(let i=0;i<30;i++){
+  const e=document.createElement('div');
+  e.className='ember';
+  const s=Math.random()*5+2;
+  e.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;
+    animation-duration:${Math.random()*6+4}s;animation-delay:${Math.random()*8}s;
+    background:hsl(${28+Math.random()*20},90%,${50+Math.random()*20}%);`;
+  ec.appendChild(e);
+}
+
+/* scroll reveal */
+const obs=new IntersectionObserver(es=>{
+  es.forEach(e=>{ if(e.isIntersecting) e.target.style.animation='fadeUp .5s ease both'; });
+},{threshold:.1});
+document.querySelectorAll('.menu-item,.feat').forEach(el=>obs.observe(el));
+</script>
+
+</body>
+</html>
